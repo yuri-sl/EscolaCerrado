@@ -1,7 +1,11 @@
+import LoginBox from "./_components/loginbox";
+import "../styles/globals.css";
+
 export default function RegisterPage() {
   return (
-    <div>
+    <main>
       <h1>Escola do cerrado!</h1>
-    </div>
+      <LoginBox />
+    </main>
   );
 }

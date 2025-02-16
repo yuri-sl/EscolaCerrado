@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.loginBox {
+  border: 14px solid #f5f4e8;
+  background-color: #fff;
+  width: 30rem;
+  height: 34rem;
+  border-radius: 98px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginBox h1 {
+  font-size: 64px;
+  color: #3e300f;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.loginBox h3 {
+  font-size: 40px;
+  color: #3e300f;
+  font-weight: bold;
+}
+
+#inputField {
+  width: 100%;
+}
+
+.inputField input {
+  background-color: #f5f4e8;
+  width: 25rem;
+  border-radius: 50px;
+}
+
+.SubmitButton {
+  width: 100%;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  align-items: center;
+  text-align: center;
+}
+
+.loginBox button {
+  align-items: center;
+  text-align: center;
+}
+
+.SubmitButton button {
+  background-color: #bfbe50;
+  border-radius: 51px;
+  font-weight: bold;
+  width: 10rem;
+  height: 2rem;
+  font-size: 25px;
+}
+
+.loginBox a {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: fit-content;
+  color: #a6551c;
+  font-weight: bold;
+  font-size: 18px;
+}
