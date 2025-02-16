@@ -59,6 +59,18 @@
   font-size: 25px;
 }
 
+.SubmitButton button:hover {
+  background-color: #f5f261;
+  color: rgb(253, 101, 0);
+}
+
+.loginBox a:hover {
+  color: hsl(25, 94%, 57%);
+  font-size: 24px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .loginBox a {
   display: flex;
   align-items: center;

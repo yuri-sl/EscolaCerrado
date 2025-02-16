@@ -41,7 +41,7 @@ export default function LoginBox() {
         />
       </div>
       <div className="SubmitButton">
-        <button type="submit">Fazer Login</button>
+        <button type="submit">Entrar</button>
       </div>
       <a>Esqueci a senha</a>
       <a>Ainda não tem uma conta? Cadastre-se</a>
