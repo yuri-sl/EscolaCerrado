@@ -14,3 +14,30 @@ export async function GET() {
     );
   }
 }
+
+// Modificando a API para permitir a criação de produtos!
+export async function POST(req: Request) {
+  try {
+    const { nome, preco } = await req.json();
+
+    if (!nome || preco == null) {
+      return NextResponse.json(
+        { error: "Nome e preço são obrigatórios" },
+        { status: 400 },
+      );
+    }
+
+    const novoProduto = await prisma.produto.create({
+      data: {
+        nome,
+        preco: parseFloat(preco), //Garantindo que estamos usando um float
+      },
+    });
+    return NextResponse.json(novoProduto, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Erro ao criar produto" },
+      { status: 500 },
+    );
+  }
+}

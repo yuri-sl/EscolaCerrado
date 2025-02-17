@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import CriarProduto from "../_components/criarProduto";
 
 type Produto = {
   id: number;
@@ -25,6 +26,7 @@ export default function Home() {
 
   return (
     <div>
+      <CriarProduto onProdutoCriado={fetchProdutos} />
       <h1>Lista de Produtos</h1>
       <button onClick={fetchProdutos}>Atualizar Lista</button>
       <table border="1">
