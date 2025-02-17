@@ -7,6 +7,7 @@ export default function RegisterPage() {
     <main>
       <h1>Escola do cerrado!</h1>
       <CriarConta />
+      <LoginBox />
     </main>
   );
 }
