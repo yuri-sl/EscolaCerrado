@@ -11,7 +11,7 @@ datasource db {
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+    url      = "file:./dev.db"
 }
 
 model Post {
@@ -25,6 +25,7 @@ model Post {
 
     @@index([name])
 }
+
 
 // Necessary for Next auth
 model Account {
@@ -71,4 +72,10 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Produto {
+  id    Int     @id @default(autoincrement())
+  nome  String
+  preco Float
 }
