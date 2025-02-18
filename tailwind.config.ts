@@ -1,14 +1,33 @@
-import { type Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
+import type { Config } from "tailwindcss";
 
-export default {
-  content: ["./src/**/*.tsx"],
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+      colors: {
+        Amarelo: "#FBDF4F",
+        AmareloClaro: "#FFEF9B",
+        Verde: "#BFBE50",
+        VerdeEscuro: "#838335",
+        VerdeClaro1: "#D2D286",
+        VerdeClaro2: "#D6D57F",
+        VerdeBemClaro: "#F5F4E8",
+        Laranja: "#E87325",
+        Marrom: "#A6551C",
+        MarromEscuro: "#3E300F",
+        Creme: "#F5F4E8",
+        Menta: "#B4EBA6",
+        Azul: "#759E99",
+        Branco: "#FFFFFF",
+        Preto: "#000000",
+        Preto2: "#3E300F",
       },
     },
   },
   plugins: [],
-} satisfies Config;
+};
+
+export default config;
