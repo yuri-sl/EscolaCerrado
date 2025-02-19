@@ -1,23 +1,24 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; 
 import "../../styles/loginBox.css";
 
 export default function CriarConta() {
+  const router = useRouter(); 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   return (
-    <form className={"loginBox"}>
+    <form className="loginBox">
       <h1>Fazer Cadastro</h1>
-
       <h3>Nome:</h3>
       <div className="inputField">
         <input
           type="text"
           name="name"
-          placeholder="insira seu nome"
+          placeholder="Insira seu nome"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -27,7 +28,7 @@ export default function CriarConta() {
         <input
           type="text"
           name="email"
-          placeholder="insira seu email"
+          placeholder="Insira seu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -37,7 +38,7 @@ export default function CriarConta() {
         <input
           type="text"
           name="username"
-          placeholder="defina seu usuário"
+          placeholder="Defina seu usuário"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -45,9 +46,9 @@ export default function CriarConta() {
       <h3>Senha:</h3>
       <div className="inputField">
         <input
-          type="text"
+          type="password"
           name="password"
-          placeholder="defina sua senha"
+          placeholder="Defina sua senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -55,7 +56,9 @@ export default function CriarConta() {
       <div className="SubmitButton">
         <button type="submit">Criar Conta</button>
       </div>
-      <a>Já possui uma conta? Faça login</a>
+      <a href="#" onClick={() => router.push("/login")}>
+        Já possui uma conta? Faça login
+      </a>
     </form>
   );
 }
