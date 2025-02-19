@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logoSmall from "../../../imgs/logo_small.png";
+import logoSmall from "../../../public/logosbg.png";
 
 export default function HeaderComponent({ title }) {
   return (

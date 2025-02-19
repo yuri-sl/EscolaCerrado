@@ -7,11 +7,18 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+        happyMonkey: ["Happy Monkey", "cursive"],
+        gentium: ["Gentium Basic", "serif"],
+      },
     colors: {
       Amarelo: "#FBDF4F",
       AmareloClaro: "#FFEF9B",
       Verde: "#BFBE50",
       VerdeEscuro: "#838335",
+      VerdeEscuro2: "#5E541D",
       VerdeClaro1: "#D2D286",
       VerdeClaro2: "#D6D57F",
       VerdeBemClaro: "#F5F4E8",
@@ -26,6 +33,7 @@ const config: Config = {
       Preto2: "#3E300F",
     },
   },
+},
   plugins: [],
 };
 
