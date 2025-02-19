@@ -8,8 +8,6 @@ export default function GoteiLayout({
       <body>
         <div>
           {children}
-
-          <div>E eu sou um footer bem bacanudo</div>
         </div>
       </body>
     </html>

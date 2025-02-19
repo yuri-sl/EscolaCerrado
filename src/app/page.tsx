@@ -1,13 +1,12 @@
 import LoginBox from "./_components/loginbox";
 import CriarConta from "./_components/criarConta";
+import Navbar from "./_components/navbar"
 import "../styles/globals.css";
 
-export default function RegisterPage() {
+export default function Homepage() {
   return (
     <main>
-      <h1>Escola do cerrado!</h1>
-      <CriarConta />
-      <LoginBox />
+      <Navbar />
     </main>
   );
 }
