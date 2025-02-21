@@ -8,7 +8,7 @@ export default function CriarConta() {
   const [email, setEmail] = useState("");
   const [cargo, setCargo] = useState("");
   const [senha, setSenha] = useState("");
-  const [imagem, setImagem] = useState<string | null>("/user.png");
+  const [imagem, setImagem] = useState<string | undefined>("/user.png");
   const [sucesso, setSucesso] = useState(false);
   const [erro, setErro] = useState("");
 
