@@ -1,12 +1,12 @@
-import LoginBox from "./_components/loginbox";
-import CriarConta from "./_components/criarConta";
-import Navbar from "./_components/navbar"
+import Navbar from "./_components/navbar";
+import NossaEquipe from "./_components/NossaEquipe";
 import "../styles/globals.css";
 
 export default function Homepage() {
   return (
     <main>
       <Navbar />
+      <NossaEquipe />
     </main>
   );
 }
