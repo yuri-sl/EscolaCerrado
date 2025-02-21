@@ -12,44 +12,15 @@ import casesV from "../../../../public/casesV.png";
 
 export default function HeaderComponent({ title }) {
   return (
-    <header className="flex h-[137px] w-full items-center">
-      <div className="h-[156px] w-[171px]">
-        <ul className="inline">
-          <li>
-            <Link href="/admin/">
-              <img
-                src="/logosbg.png"
-                alt="Logo escola do cerrado"
-                className="h-full w-full object-contain"
-              />
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/">
-              <Image src={perfilL} alt="Perfil Image" title="Perfil" />
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/tabelaFunc">
-              <Image
-                src={funcionariosV}
-                alt="Funcionarios Image"
-                title="tabela de funcionários"
-              />
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/tabelaCases">
-              <Image src={casesV} alt="Cases Image" title="tabela de cases" />
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <div className="flex flex-1 justify-center">
-        <div className="NomePagina">
-          <h1>{title}</h1>
-        </div>
-      </div>
-    </header>
+    <div className="h-screen w-64 bg-Laranja text-white flex flex-col p-4">
+      <h1 className="text-2xl font-bold mb-6">{title}</h1>
+      <nav className="space-y-4">
+        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">Home
+        </Link>
+        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">TabelaFunc        </Link>
+        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">Administrar Cases
+        </Link>
+      </nav>
+    </div>
   );
 }
