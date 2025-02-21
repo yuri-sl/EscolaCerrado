@@ -15,10 +15,10 @@ export default function HeaderComponent({ title }) {
     <div className="h-screen w-64 bg-Laranja text-white flex flex-col p-4">
       <h1 className="text-2xl font-bold mb-6">{title}</h1>
       <nav className="space-y-4">
-        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">Home
+        <Link href="/admin" className="block p-3 rounded-md hover:bg-gray-700">Home
         </Link>
         <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">TabelaFunc        </Link>
-        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">Administrar Cases
+        <Link href="/admin/tabelaCases" className="block p-3 rounded-md hover:bg-gray-700">Administrar Cases
         </Link>
       </nav>
     </div>
