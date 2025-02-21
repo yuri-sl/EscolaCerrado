@@ -48,7 +48,7 @@ export default function CriarConta() {
     <form onSubmit={handleSubmit} className="flex flex-col items-center bg-Branco border-[14px] border-Creme rounded-[98px] p-8 shadow-lg w-[679px] h-[960px]">
       <h1 className="text-[64px] font-bold text-MarromEscuro mb-4 text-center">Fazer Cadastro</h1>
       
-      <img src={imagem} alt="Foto de perfil" className="w-[176px] h-[157px] rounded-full mb-4 mt-4 object-cover" />
+      <img src={imagem} alt="Foto de perfil" className="w-[200px] h-[200px] rounded-full mb-4 mt-4 object-cover" />
       
       <label className="bg-Verde text-white py-2 px-4 rounded-[51px] cursor-pointer mb-4 hover:bg-Amarelo hover:text-orange-600">
         Inserir imagem
