@@ -48,7 +48,7 @@ export default function CriarConta() {
     <form onSubmit={handleSubmit} className="flex flex-col items-center bg-white border-[14px] border-[#f5f4e8] rounded-[98px] p-8 shadow-lg w-[679px] h-[960px]">
       <h1 className="text-[64px] font-bold text-[#3e300f] mb-4 text-center">Fazer Cadastro</h1>
       
-      <img src={imagem} alt="Foto de perfil" className="w-[176px] h-[157px] rounded-full mb-4 object-cover" />
+      <img src={imagem} alt="Foto de perfil" className="w-[176px] h-[157px] rounded-full mb-4 mt-4 object-cover" />
       
       <label className="bg-[#bfbe50] text-white py-2 px-4 rounded cursor-pointer mb-4 hover:bg-[#f5f261] hover:text-orange-600">
         Inserir imagem
@@ -106,7 +106,7 @@ export default function CriarConta() {
       {erro && <p className="text-red-600 font-bold">{erro}</p>}
 
       <button type="submit" className="bg-[#bfbe50] px-6 py-2 rounded-[51px] text-white font-bold text-[24px] w-40 h-12 hover:bg-[#f5f261] hover:text-orange-600">
-        Criar Conta
+        Criar
       </button>
 
       {sucesso && (
