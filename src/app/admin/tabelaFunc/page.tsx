@@ -11,7 +11,7 @@ const POPUP_TYPES = {
   DELETE : 'DELETE',
   SEARCH : 'SEARCH',
   EDIT : 'EDIT',
-  SAVE : 'SAVE',
+  ABOUT : 'ABOUT',
 };
 
 const TabelaFuncPag: React.FC = () => {
@@ -28,7 +28,7 @@ const TabelaFuncPag: React.FC = () => {
   };
   return (
       <div className="flex h-screen w-max">
-        <HeaderComponent title={"Área do administrador"} />
+        <HeaderComponent title={"Área do Administrador"} />
         <div className="flex gap-6">
           <section className="flex gap-6">
             <table className="h-50px border border-gray-300 bg-white">
@@ -56,7 +56,7 @@ const TabelaFuncPag: React.FC = () => {
                 </tr>
               </tbody>
             </table>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-max">
               <h1 className="text-2x1 font-bold">Teste</h1>
               <h2 className="text-2x1 font-bold">Asl</h2>
               {/* Adicionar Novo Button */}
@@ -108,14 +108,14 @@ const TabelaFuncPag: React.FC = () => {
 
               {/* Salvar Button */}
               <button
-              onClick={() => handleOpenPopup(POPUP_TYPES.SAVE)}
+              onClick={() => handleOpenPopup(POPUP_TYPES.ABOUT)}
               className="
                 bg-Menta text-white font-semibold 
                 py-2 px-4 rounded-md 
                 hover:bg-teal-500 transition duration-300 
                 shadow-md hover:shadow-lg
               ">
-                Salvar
+                Sobre
               </button>
               {visiblePopup === POPUP_TYPES.ADD && (
                 <Popup onClose={handleClosePopup}>
@@ -173,13 +173,13 @@ const TabelaFuncPag: React.FC = () => {
                   </form>
                 </Popup>
               )}
-              {visiblePopup === POPUP_TYPES.SAVE && (
+              {visiblePopup === POPUP_TYPES.ABOUT && (
                 <Popup onClose={handleClosePopup}>
                   <div className="text-center">
                     <h2 className="text-x1 font-bold mb-4">
-                      Salvar item
+                      Informações detalhadas do item
                     </h2>
-                    <p>O Item foi Salvo com sucesso</p>
+                    <p>Aqui estão as informações do funcionário mais detalhadamente:</p>
                   </div>
                 </Popup>
               )}

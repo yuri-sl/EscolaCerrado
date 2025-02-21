@@ -6,7 +6,7 @@ import "../../../styles/table.css"
 export default function TabelaFuncPag() {
   return (
       <div className="flex h-screen w-max">
-        <HeaderComponent title={"Área do administrador"} />
+        <HeaderComponent title={"Área do Administrador"} />
         <div className="flex gap-6">
           <section className="flex gap-6">
             <table className="h-50px border border-gray-300 bg-white">

@@ -6,4 +6,6 @@ table{
 button{
     border-top: 50px;
     margin-bottom: 50px;
+    border-radius: 50px;
+    width: 200px;
 }
