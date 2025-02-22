@@ -20,7 +20,7 @@ const NossaEquipe = () => {
     };
 
     return (
-        <main className="p-6">
+        <main className="p-6 mb-20">
             <h1 className="text-6xl font-gentium font-bold mb-12 text-right mr-[200px]">Nossa equipe</h1>
             <div className="flex items-center justify-center">
                 {funcionarios.length > maxVisible && (

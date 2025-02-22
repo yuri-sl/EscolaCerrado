@@ -5,11 +5,14 @@ import "../styles/globals.css";
 
 export default function Homepage() {
   return (
-    <main>
+    <main className="pt-[137px]">
       <Navbar />
-      <NossosCases />
-      <NossaEquipe />
-
+      <section id="cases">
+        <NossosCases />
+      </section>
+      <section id="equipe">
+        <NossaEquipe />
+      </section>
     </main>
   );
 }
