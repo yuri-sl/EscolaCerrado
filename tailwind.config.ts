@@ -12,6 +12,9 @@ const config: Config = {
         happyMonkey: ["Happy Monkey", "cursive"],
         gentium: ["Gentium Basic", "serif"],
       },
+      transformOrigin: {
+        'center': 'center'
+      },
     colors: {
       Amarelo: "#FBDF4F",
       AmareloClaro: "#FFEF9B",

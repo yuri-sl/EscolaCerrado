@@ -3,7 +3,7 @@ import { useState } from "react";
 import Funcionario from "./Funcionario";
 
 const NossaEquipe = () => {
-    const funcionarios = Array(6).fill({ imagem: '/user.png', nome: 'Nome', cargo: 'Cargo' }); // Simulação de 6 funcionários
+    const funcionarios = Array(6).fill({ imagem: '/user.png', nome: 'Nome', cargo: 'Cargo' }); 
     const [startIndex, setStartIndex] = useState(0);
     const maxVisible = 5;
 
