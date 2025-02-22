@@ -8,7 +8,7 @@ interface CaseProps {
     fotoCase?: string;
 }
 
-const Case = ({ nomeCase = "Título do Case", descricaoCase = "Descrição do Case", fotoCase = "/fundoBranco.png" }: CaseProps) => {
+const Case = ({ nomeCase = "Título do Case", descricaoCase = "Breve descrição do Case", fotoCase = "/fundoBranco.png" }: CaseProps) => {
     const [flipped, setFlipped] = useState(false);
 
     return (

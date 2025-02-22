@@ -11,11 +11,11 @@ interface CaseProps {
 
 const NossosCases = () => {
     const [cases, setCases] = useState<CaseProps[]>([
-        { nomeCase: "Case 1", descricaoCase: "Descrição do Case 1", fotoCase: "/fundoBranco.png" },
-        { nomeCase: "Case 2", descricaoCase: "Descrição do Case 2", fotoCase: "/fundoBranco.png" },
-        { nomeCase: "Case 3", descricaoCase: "Descrição do Case 3", fotoCase: "/fundoBranco.png" },
-        { nomeCase: "Case 4", descricaoCase: "Descrição do Case 4", fotoCase: "/fundoBranco.png" },
-        { nomeCase: "Case 5", descricaoCase: "Descrição do Case 5", fotoCase: "/fundoBranco.png" },
+        { nomeCase: "Case 1", descricaoCase: "Breve descrição do Case", fotoCase: "/fundoBranco.png" },
+        { nomeCase: "Case 2", descricaoCase: "Breve descrição do Case", fotoCase: "/fundoBranco.png" },
+        { nomeCase: "Case 3", descricaoCase: "Breve descrição do Case", fotoCase: "/fundoBranco.png" },
+        { nomeCase: "Case 4", descricaoCase: "Breve descrição do Case", fotoCase: "/fundoBranco.png" },
+        { nomeCase: "Case 5", descricaoCase: "Breve descrição do Case", fotoCase: "/fundoBranco.png" },
     ]);
 
     return (
