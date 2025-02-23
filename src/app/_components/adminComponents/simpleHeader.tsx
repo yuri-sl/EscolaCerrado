@@ -17,8 +17,10 @@ export default function HeaderComponent({ title }) {
       <nav className="space-y-4">
         <Link href="/admin" className="block p-3 rounded-md hover:bg-gray-700">Home
         </Link>
-        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">TabelaFunc        </Link>
+        <Link href="/admin/tabelaFunc" className="block p-3 rounded-md hover:bg-gray-700">Tabela Funcionários</Link>
         <Link href="/admin/tabelaCases" className="block p-3 rounded-md hover:bg-gray-700">Administrar Cases
+        </Link>
+        <Link className="block p-3 rounded-md mt-40 hover:bg-gray-700" href="../../#" id="ExitButton"> Sair do sistema
         </Link>
       </nav>
     </div>

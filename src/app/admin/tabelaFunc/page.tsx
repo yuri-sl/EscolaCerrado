@@ -5,6 +5,7 @@ import BotoesTabela from "~/app/_components/adminComponents/bot_Tabl_Func";
 import "../../../styles/table.css"
 import Popup from "../../_components/popUp";
 import { useState } from "react";
+import "../../../styles/popup.css"
 
 const POPUP_TYPES = {
   ADD : 'ADD',
@@ -57,8 +58,6 @@ const TabelaFuncPag: React.FC = () => {
               </tbody>
             </table>
             <div className="flex flex-col w-max">
-              <h1 className="text-2x1 font-bold">Teste</h1>
-              <h2 className="text-2x1 font-bold">Asl</h2>
               {/* Adicionar Novo Button */}
               <button 
               onClick={() => handleOpenPopup(POPUP_TYPES.ADD)}
@@ -67,6 +66,7 @@ const TabelaFuncPag: React.FC = () => {
                 py-2 px-4 rounded-md 
                 hover:bg-green-700 transition duration-300 
                 shadow-md hover:shadow-lg
+                mt-20
               ">
                 Adicionar Novo
               </button>
@@ -124,16 +124,16 @@ const TabelaFuncPag: React.FC = () => {
                       Adicionar novo funcionário ao sistema
                     </h2>
                     <h3>Nome</h3>
-                    <input placeholder="insira o nome do funcionário"></input>
+                    <input placeholder="insira o nome do funcionário" required></input>
                     <h3>Cargo</h3>
-                    <input placeholder="insira a função do funcionário"></input>
+                    <input placeholder="insira a função do funcionário" required></input>
                     <h3>Email</h3>
-                    <input placeholder="insira o email do funcionário"></input>
+                    <input placeholder="insira o email do funcionário" required></input>
                     <h3>Senha</h3>
-                    <input placeholder="insira a senha do funcionário"></input>
-                    <div className="flex flex-row">
-                      <button className="bg-green-600 hover:bg-green-900">Criar novo item</button>
-                      <button className="bg-red-600 hover:bg-red-900">Cancelar operação</button>
+                    <input placeholder="insira a senha do funcionário" required></input>
+                    <div className="flex flex-row border-t-8">
+                      <button className="bg-green-600 hover:bg-green-900" type="submit">Criar novo item</button>
+                      <button className="bg-red-600 hover:bg-red-900" onClick={handleClosePopup}>Cancelar operação</button>
                     </div>
                   </form>
                 </Popup>
@@ -146,8 +146,8 @@ const TabelaFuncPag: React.FC = () => {
                     </h2>
                     <h3>Deseja excluir o item?</h3>
                     <div className="flex flex-row">
-                      <button className="bg-red-600 hover:bg-red-900">Sim</button>
-                      <button className="bg-gray-500 hover:bg-gray-700">Não</button>
+                      <button className="bg-red-600 hover:bg-red-900" type="submit">Sim</button>
+                      <button className="bg-gray-500 hover:bg-gray-700" onClick={handleClosePopup}>Não</button>
                     </div>
                   </div>
                 </Popup>
@@ -166,9 +166,9 @@ const TabelaFuncPag: React.FC = () => {
                     <input placeholder="insira o email do funcionário"></input>
                     <h3>Senha</h3>
                     <input placeholder="insira a senha do funcionário"></input>
-                    <div className="flex flex-row relative">
+                    <div className="flex justify-center mt-4">
                       <button className="bg-green-600 hover:bg-green-900">Salvar</button>
-                      <button className="bg-red-600 hover:bg-red-900">Cancelar</button>
+                      <button className="bg-red-600 hover:bg-red-900" onClick={handleClosePopup}>Cancelar</button>
                     </div>
                   </form>
                 </Popup>
@@ -180,6 +180,19 @@ const TabelaFuncPag: React.FC = () => {
                       Informações detalhadas do item
                     </h2>
                     <p>Aqui estão as informações do funcionário mais detalhadamente:</p>
+                    <form className="text-center">
+                    <h3>Nome</h3>
+                    <input placeholder="insira o nome do funcionário" required></input>
+                    <h3>Cargo</h3>
+                    <input placeholder="insira a função do funcionário" required></input>
+                    <h3>Email</h3>
+                    <input placeholder="insira o email do funcionário" required></input>
+                    <h3>Senha</h3>
+                    <input placeholder="insira a senha do funcionário" required></input>
+                    <div className="flex justify-center mt-4">
+                      <button className="bg-red-600 hover:bg-red-900" onClick={handleClosePopup}>Fechar</button>
+                    </div>
+                  </form>
                   </div>
                 </Popup>
               )}
@@ -190,9 +203,22 @@ const TabelaFuncPag: React.FC = () => {
                       Pesquisar item
                     </h2>
                     <p>Pesquisar pessoa no banco de dados</p>
+                    <div className="dropdown">
+                      <button className="dropbtn">Filtro</button>
+                      <div className="dropdown-content">
+                        <a href="#">Id</a>
+                        <a href="#">Nome</a>
+                        <a href="#">Cargo</a>
+                      </div>
+                    </div>
                     <input placeholder="Insira o nome da pessoa"></input>
                   </div>
-                  <button className="bg-blue-700 hover:bg-blue-900">Pesquisar</button>
+                  <div className="flex justify-center mt-4">
+                    <button className="bg-blue-700 hover:bg-blue-900 text-white font-semibold py-2 px-4 rounded-md shadow-md transition duration-300">
+                      Pesquisar
+                    </button>
+                  </div>
+
                 </Popup>
               )}
 
