@@ -7,39 +7,22 @@ generator client {
 
 datasource db {
     provider = "sqlite"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = "file:./dev.db"
+    url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
-
-// Necessary for Next auth
+// NextAuth Models
 model Account {
     id                       String  @id @default(cuid())
     userId                   String
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
+    refresh_token            String?
+    access_token             String?
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String?
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
@@ -61,9 +44,12 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    role          String     @default("USER")
+    senha         String
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    administrador Administrador?
+    funcionario   Funcionario?
 }
 
 model VerificationToken {
@@ -74,8 +60,29 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Produto {
-  id    Int     @id @default(autoincrement())
-  nome  String
-  preco Float
+// Modelos do Sistema
+model Administrador {
+    id     Int    @id @default(autoincrement())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id])
+    cargo  String
+    foto   String?
+    cases  Case[]
+}
+
+model Funcionario {
+    id     Int    @id @default(autoincrement())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id])
+    cargo  String
+    foto   String?
+}
+
+model Case {
+    id              Int    @id @default(autoincrement())
+    titulo         String
+    descricao      String
+    foto          String?
+    administradorId Int
+    administrador   Administrador @relation(fields: [administradorId], references: [id])
 }
