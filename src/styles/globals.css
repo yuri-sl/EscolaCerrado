@@ -7,7 +7,3 @@
 @tailwind utilities;
 
 
-input:focus{
-    outline: none;
-    border: none;
-}
