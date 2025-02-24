@@ -22,7 +22,7 @@ const NossosCases = () => {
     return (
         <div className="flex flex-col mt-20">
             <h1 className="text-6xl font-gentium font-bold mb-12 text-left ml-[200px]">Cases</h1>
-            <div className="grid grid-cols-3 gap-y-16 w-[80%] mb-10 ml-[240px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-16 w-[80%] mb-10 ml-[240px]">
                 {cases.map((caseData, index) => (
                     <Case key={index} {...caseData} />
                 ))}
