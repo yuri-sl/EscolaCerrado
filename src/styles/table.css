@@ -1,0 +1,11 @@
+table{
+    width: 60rem;
+    height: 80px;
+}
+
+button{
+    border-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 50px;
+    width: 200px;
+}
