@@ -6,7 +6,6 @@ import HeaderComponent from "../_components/adminComponents/simpleHeader";
 import SwitchTabs from "../_components/adminComponents/trocarAbas";
 import "../../styles/loginBox.css";
 import user2 from "../../../public/user2.png";
-import { Menu } from "lucide-react";
 import BotoesTabela from "../_components/adminComponents/bot_Tabl_Func";
 
 export default function AreaAdmin() {
@@ -19,7 +18,6 @@ export default function AreaAdmin() {
         className="absolute top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-md md:hidden"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Menu size={24} />
       </button>
 
       {/* Navbar - Exibe se isOpen for true */}

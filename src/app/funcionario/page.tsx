@@ -4,7 +4,6 @@ import { useState } from "react";
 import FuncionarioHeaderComponent from "../_components/funcionarioComponents/FuncSimpleHeader";
 import "../../styles/loginBox.css";
 import user2 from "../../../public/user2.png";
-import { Menu } from "lucide-react";
 
 export default function AreaAdmin() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +15,6 @@ export default function AreaAdmin() {
         className="absolute top-4 left-4 z-50 bg-gray-800 text-white p-2 rounded-md md:hidden"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Menu size={24} />
       </button>
 
       {/* Navbar - Exibe se isOpen for true */}

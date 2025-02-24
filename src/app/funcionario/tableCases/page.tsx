@@ -30,7 +30,7 @@ const TabelaFuncPag: React.FC = () => {
   };
   return (
       <div className="flex h-screen w-max">
-        <FuncionarioHeaderComponent title={"Área do Administrador"} />
+        <FuncionarioHeaderComponent title={"Área do Funcionário"} />
         <div className="flex gap-6">
           <section className="flex gap-6">
             <table className="h-50px border border-gray-300 bg-white">
