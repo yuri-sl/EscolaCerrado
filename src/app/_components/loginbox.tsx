@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import "../../styles/loginBox.css";
 
 export default function LoginBox() {
-  const router = useRouter(); 
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,7 +22,7 @@ export default function LoginBox() {
   return (
     <form className="loginBox" onSubmit={handleLogin}>
       <h1>Fazer Login</h1>
-      <h3>Usuário</h3>
+      <h3>Usuário:</h3>
       <div className="inputField">
         <input
           type="text"
@@ -32,7 +32,7 @@ export default function LoginBox() {
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
-      <h3>Senha</h3>
+      <h3>Senha:</h3>
       <div className="inputField">
         <input
           type="password"

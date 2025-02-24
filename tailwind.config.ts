@@ -2,8 +2,6 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/styles/**/*.{css,scss}",
   ],
@@ -13,6 +11,9 @@ const config: Config = {
         inter: ["Inter", "sans-serif"],
         happyMonkey: ["Happy Monkey", "cursive"],
         gentium: ["Gentium Basic", "serif"],
+      },
+      transformOrigin: {
+        'center': 'center'
       },
     colors: {
       Amarelo: "#FBDF4F",

@@ -1,62 +1,121 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
-import "../../styles/loginBox.css";
+import { useRouter } from "next/navigation";
 
 export default function CriarConta() {
-  const router = useRouter(); 
-  const [name, setName] = useState("");
+  const router = useRouter();
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [cargo, setCargo] = useState("");
+  const [senha, setSenha] = useState("");
+  const [imagem, setImagem] = useState<string | undefined>("/user.png");
+  const [sucesso, setSucesso] = useState(false);
+  const [erro, setErro] = useState("");
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const imageURL = URL.createObjectURL(event.target.files[0]);
+      setImagem(imageURL);
+    }
+  };
+
+  const validarEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    
+    if (!nome || !email || !cargo || !senha) {
+      setErro("Preencha todos os campos!");
+      return;
+    }
+    if (!validarEmail(email)) {
+      setErro("Insira um e-mail válido!");
+      return;
+    }
+    if (senha.length < 6) {
+      setErro("A senha deve ter pelo menos 6 caracteres!");
+      return;
+    }
+
+    setErro("");
+    setSucesso(true);
+    setTimeout(() => setSucesso(false), 3000);
+  };
 
   return (
-    <form className="loginBox">
-      <h1>Fazer Cadastro</h1>
-      <h3>Nome:</h3>
-      <div className="inputField">
+    <form onSubmit={handleSubmit} className="flex flex-col items-center bg-Branco border-[14px] border-Creme rounded-[98px] p-8 shadow-lg w-[679px] h-[960px]">
+      <h1 className="text-[64px] font-bold text-MarromEscuro mb-4 text-center">Fazer Cadastro</h1>
+      
+      <img src={imagem} alt="Foto de perfil" className="w-[200px] h-[200px] rounded-full mb-4 mt-4 object-cover" />
+      
+      <label className="bg-Verde text-white py-2 px-4 rounded-[51px] cursor-pointer mb-4 hover:bg-Amarelo hover:text-orange-600">
+        Inserir imagem
+        <input type="file" className="hidden" onChange={handleImageUpload} />
+      </label>
+
+      <div className="w-full mb-2">
+        <label className="block text-MarromEscuro font-bold text-[24px]">Nome:</label>
         <input
           type="text"
-          name="name"
+          name="nome"
           placeholder="Insira seu nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          className="w-full bg-Creme p-2 rounded-[50px] text-[20px]"
         />
       </div>
-      <h3>Email:</h3>
-      <div className="inputField">
+      
+      <div className="w-full mb-2">
+        <label className="block text-MarromEscuro font-bold text-[24px]">Email:</label>
         <input
-          type="text"
+          type="email"
           name="email"
           placeholder="Insira seu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full bg-Creme p-2 rounded-[50px] text-[20px]"
         />
       </div>
-      <h3>Usuário:</h3>
-      <div className="inputField">
+
+      <div className="w-full mb-2">
+        <label className="block text-MarromEscuro font-bold text-[24px]">Cargo:</label>
         <input
           type="text"
-          name="username"
-          placeholder="Defina seu usuário"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          name="cargo"
+          placeholder="Defina seu cargo"
+          value={cargo}
+          onChange={(e) => setCargo(e.target.value)}
+          className="w-full bg-Creme p-2 rounded-[50px] text-[20px]"
         />
       </div>
-      <h3>Senha:</h3>
-      <div className="inputField">
+
+      <div className="w-full mb-4">
+        <label className="block text-MarromEscuro font-bold text-[24px]">Senha:</label>
         <input
           type="password"
-          name="password"
+          name="senha"
           placeholder="Defina sua senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          className="w-full bg-Creme p-2 rounded-[50px] text-[20px]"
         />
       </div>
-      <div className="SubmitButton">
-        <button type="submit">Criar Conta</button>
-      </div>
-      <a href="#" onClick={() => router.push("/login")}>
+
+      {erro && <p className="text-red-600 font-bold">{erro}</p>}
+
+      <button type="submit" className="bg-Verde px-6 py-2 rounded-[51px] text-white font-bold text-[24px] w-40 h-12 hover:bg-Amarelo hover:text-orange-600">
+        Criar
+      </button>
+
+      {sucesso && (
+        <div className="bg-Verde text-white text-[20px] font-bold px-4 py-2 rounded mt-4">
+          Conta criada com sucesso!
+        </div>
+      )}
+
+      <a href="#" onClick={() => router.push("/login")} className="text-Marrom font-bold text-[20px] mt-4 hover:underline hover:text-orange-600">
         Já possui uma conta? Faça login
       </a>
     </form>
