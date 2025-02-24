@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 main {
   display: flex;
   justify-content: center;
@@ -13,7 +14,7 @@ main {
 .loginBox {
   border: 14px solid #f5f4e8;
   background-color: #fff;
-  width: 44rem;
+  width: 55rem;
   height: 40rem;
   margin-right: 2rem;
   border-radius: 98px;
@@ -25,16 +26,16 @@ main {
 }
 
 .loginBox h1 {
-  font-size: 54px;
+  font-size: 64px;
   color: #3e300f;
   font-weight: bold;
   text-align: center;
   position: relative;
-  top: 0;
+  top: -20px;
 }
 
 .loginBox h3 {
-  font-size: 35px;
+  font-size: 40px;
   color: #3e300f;
   margin-top: 10px;
   font-weight: bold;
@@ -49,11 +50,13 @@ main {
 .inputField input {
   background-color: #f5f4e8;
   margin-top: 10px;
-  width: 25rem;
-  height: 2rem;
+  width: 32rem;
+  height: 3rem;
   border-radius: 50px;
   position: relative;
   left: 1rem;
+  font-size: 30px;
+  
 }
 
 #infoInput {
@@ -62,6 +65,7 @@ main {
 
 .SubmitButton {
   width: 100%;
+  margin-top:20px;
   padding-top: 0.5rem;
   padding-bottom: 2rem;
   align-items: center;
@@ -77,9 +81,11 @@ main {
   background-color: #bfbe50;
   border-radius: 51px;
   font-weight: bold;
-  width: 10rem;
-  height: 3rem;
-  font-size: 25px;
+  width: 12rem;
+  height: 3.5rem;
+  font-size: 30px;
+  color: #3e300f;
+  margin-top: 10px;
 }
 
 .SubmitButton button:hover {
@@ -96,8 +102,7 @@ main {
 .loginBox a {
   display: flex;
   color: #a6551c;
-  font-weight: bold;
-  font-size: 18px;
+  font-size: 32px;
   position: relative;
   left: 1rem;
 }
