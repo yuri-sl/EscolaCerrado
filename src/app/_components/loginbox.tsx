@@ -1,23 +1,30 @@
-"use client"; // 🚨 Isso é obrigatório para Next.js App Router!
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { api } from "~/utils/api"; // Importe o cliente tRPC
+import { api } from "~/utils/api";
 import "../../styles/loginBox.css";
+
 
 export default function LoginBox() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  // Use a mutação do tRPC para fazer login
+  // Mutação do tRPC para fazer login
   const loginMutation = api.auth.login.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       alert("Login bem-sucedido!");
-      router.push("/dashboard"); // Redireciona para a página de dashboard após o login
+
+      // 🔹 Verifica o cargo e redireciona para a página correta
+      if (data.user.role === "ADMIN") {
+        router.push("/admin-dashboard"); // Página do administrador
+      } else {
+        router.push("/funcionario-dashboard"); // Página do funcionário
+      }
     },
     onError: (error) => {
-      alert(error.message); // Exibe o erro retornado pelo back-end
+      alert(error.message); // Exibe erro se houver falha no login
     },
   });
 
