@@ -32,7 +32,8 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" DATETIME,
     "image" TEXT,
-    "role" TEXT NOT NULL DEFAULT 'USER'
+    "role" TEXT NOT NULL DEFAULT 'USER',
+    "senha" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -68,6 +69,13 @@ CREATE TABLE "Case" (
     "foto" TEXT,
     "administradorId" INTEGER NOT NULL,
     CONSTRAINT "Case_administradorId_fkey" FOREIGN KEY ("administradorId") REFERENCES "Administrador" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Usuario" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "nome" TEXT NOT NULL,
+    "cargo" TEXT NOT NULL
 );
 
 -- CreateIndex

@@ -86,3 +86,10 @@ model Case {
     administradorId Int
     administrador   Administrador @relation(fields: [administradorId], references: [id])
 }
+
+model Usuario{
+    id Int @id@default(autoincrement())
+    nome String
+    cargo String
+
+}

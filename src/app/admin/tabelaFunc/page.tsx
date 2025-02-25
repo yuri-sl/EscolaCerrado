@@ -6,6 +6,7 @@ import "../../../styles/table.css"
 import Popup from "../../_components/popUp";
 import { useState } from "react";
 import "../../../styles/popup.css"
+import UsuarioTable from "~/app/_components/adminComponents/usuarioTable";
 
 const POPUP_TYPES = {
   ADD : 'ADD',
@@ -56,6 +57,7 @@ const TabelaFuncPag: React.FC = () => {
                   <td className="border-b px-4 py-2">get outta here</td>
                 </tr>
               </tbody>
+              <UsuarioTable />
             </table>
             <div className="flex flex-col w-max">
               {/* Adicionar Novo Button */}
