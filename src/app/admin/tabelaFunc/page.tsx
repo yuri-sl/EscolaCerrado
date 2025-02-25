@@ -139,21 +139,116 @@ const TabelaFuncPag: React.FC = () => {
               </button>
               {visiblePopup === POPUP_TYPES.ADD && (
                 <Popup onClose={handleClosePopup}>
-                  <form className="text-center">
-                    <h2 className="text-x1 font-bold mb-4">
+                <form
+                  className="text-center"
+                  onSubmit={async (event) => {
+                    event.preventDefault(); // Impede o comportamento padrão do formulário
+
+                    // Captura os dados do formulário
+                    const formData = {
+                      nome: event.target.nome.value,
+                      cargo: event.target.cargo.value,
+                      email: event.target.email.value,
+                      senha: event.target.senha.value || "senha_padrao", // Valor padrão se não for fornecido
+                      foto: "default.jpg", // Pode ser atualizado conforme necessário
+                    };
+
+                    try {
+                      // Envia os dados para o endpoint da API
+                      const response = await fetch('/api/usuarios', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                      });
+
+                      const data = await response.json();
+
+                      // Exibe uma mensagem de sucesso ou erro
+                      if (response.ok) {
+                        alert('Usuário cadastrado com sucesso!');
+
+                        // Atualiza a lista de usuários
+                        setUsuarios((prevUsuarios) => [...prevUsuarios, data]);
+
+                        handleClosePopup(); // Fecha o popup após o sucesso
+                      } else {
+                        alert(`Erro: ${data.error || 'Falha ao cadastrar usuário'}`);
+                      }
+                    } catch (error) {
+                      alert(`Erro: ${error.message}`);
+                    }
+                  }}
+                >
+                    <h2 className="text-xl font-bold mb-4">
                       Adicionar novo funcionário ao sistema
                     </h2>
-                    <h3>Nome</h3>
-                    <input placeholder="insira o nome do funcionário" required></input>
-                    <h3>Cargo</h3>
-                    <input placeholder="insira a função do funcionário" required></input>
-                    <h3>Email</h3>
-                    <input placeholder="insira o email do funcionário" required></input>
-                    <h3>Senha</h3>
-                    <input placeholder="insira a senha do funcionário" required></input>
-                    <div className="flex flex-row border-t-8">
-                      <button className="bg-green-600 hover:bg-green-900" type="submit">Criar novo item</button>
-                      <button className="bg-red-600 hover:bg-red-900" onClick={handleClosePopup}>Cancelar operação</button>
+                    <div className="mb-4">
+                      <h3>Id</h3>
+                      <input
+                        name="id"
+                        placeholder="Insira o id do funcionário"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <h3>Nome</h3>
+                      <input
+                        name="nome"
+                        placeholder="Insira o nome do funcionário"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <h3>Cargo</h3>
+                      <input
+                        name="cargo"
+                        placeholder="Insira a função do funcionário"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <h3>Email</h3>
+                      <input
+                        name="email"
+                        type="email"
+                        placeholder="Insira o email do funcionário"
+                        required
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+
+                    <div className="mb-4">
+                      <h3>Senha</h3>
+                      <input
+                        name="senha"
+                        type="password"
+                        placeholder="Insira a senha do funcionário"
+                        className="w-full p-2 border rounded"
+                      />
+                    </div>
+
+                    <div className="flex flex-row justify-between border-t-8 pt-4">
+                      <button
+                        className="bg-green-600 hover:bg-green-900 text-white px-4 py-2 rounded"
+                        type="submit"
+                      >
+                        Criar novo item
+                      </button>
+                      <button
+                        className="bg-red-600 hover:bg-red-900 text-white px-4 py-2 rounded"
+                        onClick={handleClosePopup}
+                        type="button" // Evita que o botão de cancelar envie o formulário
+                      >
+                        Cancelar operação
+                      </button>
                     </div>
                   </form>
                 </Popup>
