@@ -28,6 +28,8 @@ interface Usuario {
 const TabelaFuncPag: React.FC = () => {
   const [visiblePopup, setVisiblePopup] = useState<string | null>(null);
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
   
     useEffect(() => {
       fetch("/api/usuarios")
@@ -44,6 +46,33 @@ const TabelaFuncPag: React.FC = () => {
   const handleClosePopup = () => {
     setVisiblePopup(null);
   };
+  const handleDeleteUsuario = async (id: number) => {
+    if (!confirm("Tem certeza que deseja excluir este usuário?")) return;
+  
+    try {
+      const response = await fetch("/api/usuarios", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert("Usuário deletado com sucesso!");
+  
+        // Atualizar a lista de usuários removendo o usuário deletado
+        setUsuarios((prevUsuarios) => prevUsuarios.filter((user) => user.id !== id));
+  
+        handleClosePopup(); // Fechar o popup após a exclusão
+      } else {
+        alert(`Erro: ${data.error || "Falha ao deletar usuário"}`);
+      }
+    } catch (error) {
+      alert(`Erro: ${error.message}`);
+    }
+  };
+  
   return (
       <div className="flex h-screen w-max">
         <HeaderComponent title={"Área do Administrador"} />
@@ -256,17 +285,39 @@ const TabelaFuncPag: React.FC = () => {
               {visiblePopup === POPUP_TYPES.DELETE && (
                 <Popup onClose={handleClosePopup}>
                   <div className="text-center">
-                    <h2 className="text-x1 font-bold mb-4">
-                      Excluir item
-                    </h2>
-                    <h3>Deseja excluir o item?</h3>
-                    <div className="flex flex-row">
-                      <button className="bg-red-600 hover:bg-red-900" type="submit">Sim</button>
-                      <button className="bg-gray-500 hover:bg-gray-700" onClick={handleClosePopup}>Não</button>
+                    <h2 className="text-xl font-bold mb-4">Excluir Usuário</h2>
+                    <p>Selecione o ID do usuário a ser excluído:</p>
+                    <select
+                      className="w-full p-2 border rounded my-2"
+                      onChange={(e) => setSelectedUserId(Number(e.target.value))}
+                      value={selectedUserId || ""}
+                    >
+                      <option value="">Selecione um usuário</option>
+                      {usuarios.map((usuario) => (
+                        <option key={usuario.id} value={usuario.id}>
+                          {usuario.nome} (ID: {usuario.id})
+                        </option>
+                      ))}
+                    </select>
+                    <div className="flex justify-center mt-4">
+                      <button
+                        className="bg-red-600 hover:bg-red-900 text-white px-4 py-2 rounded"
+                        onClick={() => selectedUserId && handleDeleteUsuario(selectedUserId)}
+                        disabled={!selectedUserId} // Desativa o botão se nenhum usuário for selecionado
+                      >
+                        Confirmar Exclusão
+                      </button>
+                      <button
+                        className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded ml-4"
+                        onClick={handleClosePopup}
+                      >
+                        Cancelar
+                      </button>
                     </div>
                   </div>
                 </Popup>
               )}
+
               {visiblePopup === POPUP_TYPES.EDIT && (
                 <Popup onClose={handleClosePopup}>
                   <form className="text-center items-center">

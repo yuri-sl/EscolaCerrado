@@ -43,3 +43,27 @@ export async function POST(request: Request) {
     );
   }
 }
+
+// Endpoint DELETE para remover um usuário pelo ID
+export async function DELETE(request: Request) {
+  try {
+    const { id } = await request.json();
+
+    // Validação para garantir que um ID foi fornecido
+    if (!id) {
+      return NextResponse.json({ error: "O ID do usuário é obrigatório" }, { status: 400 });
+    }
+
+    // Deletar usuário no banco de dados
+    await prisma.usuario.delete({
+      where: { id: Number(id) },
+    });
+
+    return NextResponse.json({ message: "Usuário deletado com sucesso" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Erro ao deletar usuário", details: error.message },
+      { status: 400 }
+    );
+  }
+}
