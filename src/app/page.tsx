@@ -1,6 +1,7 @@
 import Navbar from "./_components/navbar";
 import NossaEquipe from "./_components/NossaEquipe";
 import NossosCases from "./_components/NossosCases";
+import Footer from "./_components/Footer";
 import "../styles/globals.css";
 
 export default function Homepage() {
@@ -12,6 +13,9 @@ export default function Homepage() {
       </section>
       <section id="equipe">
         <NossaEquipe />
+      </section>
+      <section>
+        <Footer />
       </section>
     </main>
   );
