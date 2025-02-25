@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import bcrypt from "bcrypt"; // 🔹 Adiciona bcrypt para proteger senhas
+import bcrypt from "bcryptjs"; 
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure
@@ -21,13 +21,20 @@ export const authRouter = createTRPCRouter({
         throw new Error("E-mail ou senha incorretos.");
       }
 
-      // 🔹 Compara a senha digitada com a senha criptografada
-      const senhaCorreta = await bcrypt.compare(senha, user.senha);
+      // 🔹 Compara a senha digitada com a senha criptografada no banco
+      const senhaCorreta = bcrypt.compareSync(senha, user.senha);
       if (!senhaCorreta) {
         throw new Error("E-mail ou senha incorretos.");
       }
 
-      return { message: "Login bem-sucedido!", user : {id : user.id, email: user.email, role: user.role}  };
+      return {
+        message: "Login bem-sucedido!",
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role, 
+        },
+      };
     }),
 
   signup: publicProcedure
@@ -41,7 +48,7 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => { 
       const { nome, email, cargo, senha, imagem } = input;
 
-      // 🔹 Verifica se o e-mail já existe para evitar duplicação
+      // Verifica se o e-mail já existe para evitar duplicação
       const userExistente = await ctx.db.user.findUnique({
         where: { email },
       });
@@ -51,14 +58,14 @@ export const authRouter = createTRPCRouter({
       }
 
       // 🔹 Criptografar a senha antes de salvar no banco
-      const senhaCriptografada = await bcrypt.hash(senha, 10);
+      const senhaCriptografada = bcrypt.hashSync(senha, 10);
 
       // Criar usuário no banco
       const user = await ctx.db.user.create({
         data: {
           name: nome,
           email,
-          senha: senhaCriptografada, // ✅ Agora salva a senha criptografada
+          senha: senhaCriptografada, 
           image: imagem,
           role: cargo === "Administrador" ? "ADMIN" : "USER",
         },
