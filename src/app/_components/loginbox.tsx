@@ -16,7 +16,7 @@ export default function LoginBox() {
     onSuccess: (data) => {
       alert("Login bem-sucedido!");
 
-      // 🔹 Verifica o cargo e redireciona para a página correta
+      // Verifica o cargo e redireciona para a página correta
       if (data.user.role === "ADMIN") {
         router.push("/admin-dashboard"); // Página do administrador
       } else {
