@@ -4,7 +4,7 @@ import SwitchTabs from "../../_components/adminComponents/trocarAbas";
 import BotoesTabela from "~/app/_components/adminComponents/bot_Tabl_Func";
 import "../../../styles/table.css"
 import Popup from "../../_components/popUp";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../../../styles/popup.css"
 import UsuarioTable from "~/app/_components/adminComponents/usuarioTable";
 
@@ -16,8 +16,24 @@ const POPUP_TYPES = {
   ABOUT : 'ABOUT',
 };
 
+interface Usuario {
+  id: number;
+  nome: string;
+  cargo: string;
+  email: string;
+  foto: string;
+  senha: string;
+}
+
 const TabelaFuncPag: React.FC = () => {
   const [visiblePopup, setVisiblePopup] = useState<string | null>(null);
+    const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  
+    useEffect(() => {
+      fetch("/api/usuarios")
+        .then((res) => res.json())
+        .then((data) => setUsuarios(data));
+    }, []);
 
   // Handle opening a popup
   const handleOpenPopup = (popupType: string) => {
@@ -49,15 +65,17 @@ const TabelaFuncPag: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="hover:bg-gray-50">
-                  <td className="border-b px-4 py-2">1542</td>
-                  <td className="border-b px-4 py-2">Ichigo</td>
-                  <td className="border-b px-4 py-2">15</td>
-                  <td className="border-b px-4 py-2">strawberry@</td>
-                  <td className="border-b px-4 py-2">get outta here</td>
+              {usuarios.map((usuario) => (
+                <tr key={usuario.id} className="hover:bg-gray-50">
+                  <td className="border-b px-4 py-2">{usuario.id}</td>
+                  <td className="border-b px-4 py-2">{usuario.nome}</td>
+                  <td className="border-b px-4 py-2">{usuario.cargo}</td>
+                  <td className="border-b px-4 py-2">{usuario.email}</td>
+                  <td className="border-b px-4 py-2">{usuario.senha}</td>
+                  <td className="border-b px-4 py-2">{usuario.foto}</td>
                 </tr>
+              ))}
               </tbody>
-              <UsuarioTable />
             </table>
             <div className="flex flex-col w-max">
               {/* Adicionar Novo Button */}
