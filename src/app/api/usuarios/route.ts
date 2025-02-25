@@ -67,3 +67,34 @@ export async function DELETE(request: Request) {
     );
   }
 }
+
+// Endpoint PUT para editar um usuário pelo ID
+export async function PUT(request: Request) {
+  try {
+    const { id, nome, cargo, email, senha, foto } = await request.json();
+
+    // Validação para garantir que um ID foi fornecido
+    if (!id) {
+      return NextResponse.json({ error: "O ID do usuário é obrigatório" }, { status: 400 });
+    }
+
+    // Atualiza os dados do usuário no banco
+    const usuarioAtualizado = await prisma.usuario.update({
+      where: { id: Number(id) },
+      data: {
+        nome,
+        cargo,
+        email,
+        senha: senha || "senha_padrao", // Mantém a senha anterior caso não seja alterada
+        foto: foto || "default.jpg",
+      },
+    });
+
+    return NextResponse.json(usuarioAtualizado, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Erro ao atualizar usuário", details: error.message },
+      { status: 400 }
+    );
+  }
+}

@@ -25,10 +25,21 @@ interface Usuario {
   senha: string;
 }
 
+
+
 const TabelaFuncPag: React.FC = () => {
   const [visiblePopup, setVisiblePopup] = useState<string | null>(null);
-    const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedEditUserId, setSelectedEditUserId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState<Usuario>({
+    id: 0,
+    nome: "",
+    cargo: "",
+    email: "",
+    senha: "",
+    foto: "",
+  });
 
   
     useEffect(() => {
@@ -72,6 +83,46 @@ const TabelaFuncPag: React.FC = () => {
       alert(`Erro: ${error.message}`);
     }
   };
+  const handleSelectEditUser = (id: number) => {
+    const user = usuarios.find((usuario) => usuario.id === id);
+    if (user) {
+      setSelectedEditUserId(id);
+      setEditFormData(user); // Preenche o formulário com os dados atuais do usuário
+    }
+  };
+  const handleEditUsuario = async (event: React.FormEvent) => {
+    event.preventDefault();
+  
+    if (!selectedEditUserId) return alert("Selecione um usuário para editar");
+  
+    try {
+      const response = await fetch("/api/usuarios", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editFormData),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert("Usuário atualizado com sucesso!");
+  
+        // Atualiza a lista de usuários
+        setUsuarios((prevUsuarios) =>
+          prevUsuarios.map((user) =>
+            user.id === selectedEditUserId ? data : user
+          )
+        );
+  
+        handleClosePopup();
+      } else {
+        alert(`Erro: ${data.error || "Falha ao atualizar usuário"}`);
+      }
+    } catch (error) {
+      alert(`Erro: ${error.message}`);
+    }
+  };
+  
   
   return (
       <div className="flex h-screen w-max">
@@ -320,22 +371,94 @@ const TabelaFuncPag: React.FC = () => {
 
               {visiblePopup === POPUP_TYPES.EDIT && (
                 <Popup onClose={handleClosePopup}>
-                  <form className="text-center items-center">
-                    <h2 className="text-x1 font-bold mb-4">
-                      Editar dados de funcionário do sistema
-                    </h2>
-                    <h3>Nome</h3>
-                    <input placeholder="insira o nome do funcionário"></input>
-                    <h3>Cargo</h3>
-                    <input placeholder="insira a função do funcionário"></input>
-                    <h3>Email</h3>
-                    <input placeholder="insira o email do funcionário"></input>
-                    <h3>Senha</h3>
-                    <input placeholder="insira a senha do funcionário"></input>
-                    <div className="flex justify-center mt-4">
-                      <button className="bg-green-600 hover:bg-green-900">Salvar</button>
-                      <button className="bg-red-600 hover:bg-red-900" onClick={handleClosePopup}>Cancelar</button>
-                    </div>
+                  <form className="text-center" onSubmit={handleEditUsuario}>
+                    <h2 className="text-xl font-bold mb-4">Editar Usuário</h2>
+
+                    <p>Selecione um ID para editar:</p>
+                    <select
+                      className="w-full p-2 border rounded my-2"
+                      onChange={(e) => handleSelectEditUser(Number(e.target.value))}
+                      value={selectedEditUserId || ""}
+                    >
+                      <option value="">Selecione um usuário</option>
+                      {usuarios.map((usuario) => (
+                        <option key={usuario.id} value={usuario.id}>
+                          {usuario.nome} (ID: {usuario.id})
+                        </option>
+                      ))}
+                    </select>
+
+                    {selectedEditUserId && (
+                      <>
+                        <div className="mb-4">
+                          <h3>Nome</h3>
+                          <input
+                            className="w-full p-2 border rounded"
+                            name="nome"
+                            value={editFormData.nome}
+                            onChange={(e) =>
+                              setEditFormData({ ...editFormData, nome: e.target.value })
+                            }
+                            required
+                          />
+                        </div>
+
+                        <div className="mb-4">
+                          <h3>Cargo</h3>
+                          <input
+                            className="w-full p-2 border rounded"
+                            name="cargo"
+                            value={editFormData.cargo}
+                            onChange={(e) =>
+                              setEditFormData({ ...editFormData, cargo: e.target.value })
+                            }
+                            required
+                          />
+                        </div>
+
+                        <div className="mb-4">
+                          <h3>Email</h3>
+                          <input
+                            className="w-full p-2 border rounded"
+                            name="email"
+                            type="email"
+                            value={editFormData.email}
+                            onChange={(e) =>
+                              setEditFormData({ ...editFormData, email: e.target.value })
+                            }
+                            required
+                          />
+                        </div>
+
+                        <div className="mb-4">
+                          <h3>Senha</h3>
+                          <input
+                            className="w-full p-2 border rounded"
+                            name="senha"
+                            type="password"
+                            placeholder="Deixe em branco para manter a mesma senha"
+                            onChange={(e) =>
+                              setEditFormData({ ...editFormData, senha: e.target.value })
+                            }
+                          />
+                        </div>
+
+                        <div className="flex justify-center mt-4">
+                          <button
+                            className="bg-green-600 hover:bg-green-900 text-white px-4 py-2 rounded"
+                            type="submit"
+                          >
+                            Salvar Alterações
+                          </button>
+                          <button
+                            className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded ml-4"
+                            onClick={handleClosePopup}
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </form>
                 </Popup>
               )}
