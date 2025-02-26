@@ -86,3 +86,19 @@ model Case {
     administradorId Int
     administrador   Administrador @relation(fields: [administradorId], references: [id])
 }
+
+model Usuario{
+    id Int @id@default(autoincrement())
+    nome String
+    cargo String
+    email  String  @unique @default("email@example.com")
+    foto   String  @default("default.jpg")
+    senha  String  @default("senha_padrao")
+}
+
+model Success_Cases{
+    id Int @id@default(autoincrement())
+    titulo String
+    descricao String
+    foto String
+}
