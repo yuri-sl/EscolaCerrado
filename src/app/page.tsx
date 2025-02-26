@@ -3,6 +3,7 @@ import NossaEquipe from "./_components/NossaEquipe";
 import NossosCases from "./_components/NossosCases";
 import Footer from "./_components/Footer";
 import HeroSection from "./_components/HeroSection";
+import SobreNos from "./_components/SobreNos";
 import "../styles/globals.css";
 
 export default function Homepage() {
@@ -11,6 +12,9 @@ export default function Homepage() {
       <Navbar />
       <section>
         <HeroSection />
+      </section>
+      <section>
+        <SobreNos />
       </section>
       <section id="cases">
         <NossosCases />
