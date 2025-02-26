@@ -1,14 +1,13 @@
 import { z } from 'zod';
-import { createTRPCRouter, publicProcedure } from '../trpc';
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const caseRouter = createTRPCRouter({
-  getAll: publicProcedure
-    .query(async ({ ctx }) => { 
-      const cases = await ctx.db.case.findMany({
-        include: { administrador: true },
-      });
-      return { cases };
-    }),
+  getAll: publicProcedure.query(async ({ ctx }) => { 
+    const cases = await ctx.db.case.findMany({
+      include: { administrador: { include: { user: true } } }, // 🔹 Agora inclui o nome do administrador
+    });
+    return cases;
+  }),
 
   create: publicProcedure
     .input(z.object({
