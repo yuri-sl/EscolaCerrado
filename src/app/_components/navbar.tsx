@@ -56,7 +56,6 @@ const Navbar = () => {
           >
             Nossa equipe
           </button>
-          <div className="hidden sm:block">Entre em contato</div>
           <Link href="/login">
             <button className="bg-AmareloClaro text-Preto text-[24px] sm:text-[32px] py-2 px-8 rounded-full">
                 Fazer Login

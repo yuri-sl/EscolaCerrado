@@ -1,18 +1,13 @@
-import "../styles/globals.css";
+import { TRPCProvider } from "./_providers/trpc-provider"; // Importa o provider do tRPC
+import "~/styles/globals.css";
 
-import "../styles/globals.css"; 
-
-export default function GoteiLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="pt">
       <body>
-        <div>
+        <TRPCProvider>
           {children}
-        </div>
+        </TRPCProvider>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { api } from "~/utils/api"; // Importe o cliente tRPC
 
 export default function CriarConta() {
   const router = useRouter();
@@ -11,6 +12,20 @@ export default function CriarConta() {
   const [imagem, setImagem] = useState<string | undefined>("/user.png");
   const [sucesso, setSucesso] = useState(false);
   const [erro, setErro] = useState("");
+
+  // Use a mutação do tRPC para criar a conta
+  const signupMutation = api.auth.signup.useMutation({
+    onSuccess: () => {
+      setSucesso(true);
+      setTimeout(() => {
+        setSucesso(false);
+        router.push("/login"); // Redireciona para a página de login após o sucesso
+      }, 3000);
+    },
+    onError: (error) => {
+      setErro(error.message); // Exibe o erro retornado pelo back-end
+    },
+  });
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -25,7 +40,8 @@ export default function CriarConta() {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    
+
+    // Validação dos campos
     if (!nome || !email || !cargo || !senha) {
       setErro("Preencha todos os campos!");
       return;
@@ -40,8 +56,8 @@ export default function CriarConta() {
     }
 
     setErro("");
-    setSucesso(true);
-    setTimeout(() => setSucesso(false), 3000);
+    // Chama a mutação do tRPC para criar a conta
+    signupMutation.mutate({ nome, email, cargo, senha, imagem });
   };
 
   return (
