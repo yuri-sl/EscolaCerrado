@@ -4,8 +4,9 @@ import SwitchTabs from "../../_components/adminComponents/trocarAbas";
 import BotoesTabela from "~/app/_components/adminComponents/bot_Tabl_Func";
 import "../../../styles/table.css"
 import Popup from "../../_components/popUp";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../../../styles/popup.css"
+import { Success_Cases } from "@prisma/client";
 
 const POPUP_TYPES = {
   ADD : 'ADD',
@@ -17,44 +18,98 @@ const POPUP_TYPES = {
 
 const TabelaFuncPag: React.FC = () => {
   const [visiblePopup, setVisiblePopup] = useState<string | null>(null);
+  const [cases, setCases] = useState<Success_Cases[]>([]);
+  const [selectedCasesId, setSelectedCasesId] = useState<number | null>(null);
+  const [selectedEditCasesId, setSelectedEditCasesId] = useState<number | null>(null);
+  const [newCaseData, setNewCaseData] = useState({
+    titulo: "",
+    descricao: "",
+    foto: "",
+  });
 
-  // Handle opening a popup
+  useEffect(() => {
+    const fetchCases = async () => {
+      try {
+        const response = await fetch("/api/SuccessCases");
+        if (!response.ok) {
+          throw new Error("Erro ao buscar cases");
+        }
+        const data = await response.json();
+        setCases(data);
+      } catch (error) {
+        console.error("Erro ao carregar cases:", error);
+      }
+    };
+    fetchCases();
+  }, []);
+
   const handleOpenPopup = (popupType: string) => {
     setVisiblePopup(popupType);
   };
 
-  // Handle closing the popup
   const handleClosePopup = () => {
     setVisiblePopup(null);
   };
+
+  const handleCreateCase = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const response = await fetch("/api/SuccessCases", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newCaseData),
+      });
+
+      if (response.ok) {
+        const createdCase = await response.json();
+        setCases((prevCases) => [...prevCases, createdCase]);
+        alert("Case criado com sucesso!");
+        handleClosePopup();
+      } else {
+        alert("Erro ao criar o case");
+      }
+    } catch (error) {
+      console.error("Erro ao criar case:", error);
+      alert(`Erro: ${error.message}`);
+    }
+  };
+
   return (
-      <div className="flex h-screen w-max">
-        <HeaderComponent title={"Área do Administrador"} />
-        <div className="flex gap-6">
-          <section className="flex gap-6">
-            <table className="h-50px border border-gray-300 bg-white">
-              <thead>
-                <tr className="bg-gray-100 h-40px">
-                  <th className="border-b px-4 py-2 text-center" colSpan="4">
-                    Tabela de Cases
-                  </th>
+    <div className="flex h-screen w-max">
+      <HeaderComponent title={"Área do Administrador"} />
+      <div className="flex gap-6">
+        <section className="flex gap-6">
+          <table className="h-50px border border-gray-300 bg-white">
+            <thead>
+              <tr className="bg-gray-100 h-40px">
+                <th className="border-b px-4 py-2 text-center" colSpan={4}>
+                  Tabela de Cases
+                </th>
+              </tr>
+              <tr className="bg-gray-100">
+                <th className="border-b px-4 py-2">Id</th>
+                <th className="border-b px-4 py-2">Título</th>
+                <th className="border-b px-4 py-2">Descrição</th>
+                <th className="border-b px-4 py-2">Foto</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cases.length > 0 ? (
+                cases.map((c) => (
+                  <tr key={c.id} className="hover:bg-gray-50">
+                    <td className="border-b px-4 py-2">{c.id}</td>
+                    <td className="border-b px-4 py-2">{c.titulo}</td>
+                    <td className="border-b px-4 py-2">{c.descricao}</td>
+                    <td className="border-b px-4 py-2">{c.foto}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="border-b px-4 py-2 text-center">Nenhum case encontrado</td>
                 </tr>
-                <tr className="bg-gray-100">
-                  <th className="border-b px-4 py-2">Id</th>
-                  <th className="border-b px-4 py-2">titulo</th>
-                  <th className="border-b px-4 py-2">descrição</th>
-                  <th className="border-b px-4 py-2">foto</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="hover:bg-gray-50">
-                  <td className="border-b px-4 py-2">1542</td>
-                  <td className="border-b px-4 py-2">Ichigo</td>
-                  <td className="border-b px-4 py-2">Shinigami Daikou</td>
-                  <td className="border-b px-4 py-2">Picture of deathberry</td>
-                </tr>
-              </tbody>
-            </table>
+              )}
+            </tbody>
+          </table>
             <div className="flex flex-col w-max">
               {/* Adicionar Novo Button */}
               <button 
@@ -117,16 +172,29 @@ const TabelaFuncPag: React.FC = () => {
               </button>
               {visiblePopup === POPUP_TYPES.ADD && (
                 <Popup onClose={handleClosePopup}>
-                  <form className="text-center">
-                    <h2 className="text-x1 font-bold mb-4">
-                      Adicionar novo funcionário ao sistema
-                    </h2>
-                    <h3>Titulo</h3>
-                    <input placeholder="insira o título do case" required></input>
+                  <form className="text-center" onSubmit={handleCreateCase}>
+                    <h2 className="text-x1 font-bold mb-4">Adicionar Novo Case</h2>
+                    <h3>Título</h3>
+                    <input
+                      placeholder="Insira o título do case"
+                      required
+                      value={newCaseData.titulo}
+                      onChange={(e) => setNewCaseData({ ...newCaseData, titulo: e.target.value })}
+                    />
                     <h3>Descrição</h3>
-                    <input placeholder="insira a descrição do case" required></input>
+                    <input
+                      placeholder="Insira a descrição do case"
+                      required
+                      value={newCaseData.descricao}
+                      onChange={(e) => setNewCaseData({ ...newCaseData, descricao: e.target.value })}
+                    />
                     <h3>Foto</h3>
-                    <input placeholder="insira o link da foto do case" required></input>
+                    <input
+                      placeholder="Insira o link da foto do case"
+                      required
+                      value={newCaseData.foto}
+                      onChange={(e) => setNewCaseData({ ...newCaseData, foto: e.target.value })}
+                    />
                     <div className="flex flex-row border-t-8">
                       <button className="bg-green-600 hover:bg-green-900" type="submit">Criar novo item</button>
                       <button className="bg-red-600 hover:bg-red-900" onClick={handleClosePopup}>Cancelar operação</button>
