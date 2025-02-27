@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const seções = ["cases", "equipe"];
+  const seções = ["sobre", "cases", "equipe"];
   const [seçãoAtiva, setSeçãoAtiva] = useState("");
 
   useEffect(() => {
@@ -43,7 +43,12 @@ const Navbar = () => {
       </div>
       <div className="flex-1 flex justify-center">
         <nav className="flex items-center space-x-12 text-Preto text-[32px] font-inter">
-          <div className="hidden sm:block">Sobre</div>
+          <button 
+            onClick={() => rolarParaSeção("sobre")}
+            className={`cursor-pointer transition-all ${seçãoAtiva === "sobre" ? "font-bold" : ""} text-[24px] sm:text-[32px]`}
+          >
+            Sobre
+          </button>
           <button 
             onClick={() => rolarParaSeção("cases")}
             className={`cursor-pointer transition-all ${seçãoAtiva === "cases" ? "font-bold" : ""} text-[24px] sm:text-[32px]`}
