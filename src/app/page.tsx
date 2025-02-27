@@ -13,7 +13,7 @@ export default function Homepage() {
       <section>
         <HeroSection />
       </section>
-      <section>
+      <section id= "sobre">
         <SobreNos />
       </section>
       <section id="cases">
