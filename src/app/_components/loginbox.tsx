@@ -18,9 +18,9 @@ export default function LoginBox() {
 
       // Verifica o cargo e redireciona para a página correta
       if (data.user.role === "ADMIN") {
-        router.push("/admin-dashboard"); // Página do administrador
+        router.push("/admin"); // Página do administrador
       } else {
-        router.push("/funcionario-dashboard"); // Página do funcionário
+        router.push("/funcionario"); // Página do funcionário
       }
     },
     onError: (error) => {
