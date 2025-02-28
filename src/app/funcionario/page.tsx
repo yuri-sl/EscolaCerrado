@@ -16,19 +16,23 @@ export default function AreaFuncionario() {
   const updateUser = api.auth.updateUser.useMutation();
 
   const [nome, setNome] = useState("");
-  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState("");
   const [cargo, setCargo] = useState("");
+  const [senha, setSenha] = useState("");
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>(user2.src);
 
+  // Preencher os dados ao carregar o usuário
   useEffect(() => {
     if (user) {
       setNome(user.name ?? "");
+      setEmail(user.email ?? "");
       setCargo(user.cargo ?? "");
       setPreview(user.image ? user.image : user2.src);
     }
   }, [user]);
 
+  // Manipula troca de foto (preview)
   const handleFotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -37,6 +41,7 @@ export default function AreaFuncionario() {
     }
   };
 
+  // Converte imagem para base64
   const convertFileToBase64 = (file: File) => {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -46,6 +51,7 @@ export default function AreaFuncionario() {
     });
   };
 
+  // Salvar dados
   const handleSave = async () => {
     let fotoBase64: string | undefined;
 
@@ -57,6 +63,8 @@ export default function AreaFuncionario() {
       {
         id: userId,
         name: nome,
+        email: email,
+        cargo: cargo,
         senha: senha || undefined,
         foto: fotoBase64 || undefined,
       },
@@ -82,9 +90,10 @@ export default function AreaFuncionario() {
         <FuncionarioHeaderComponent title="Área do Funcionário" />
       </div>
 
-      {/* Conteúdo principal ajustado */}
-      <div className="flex-1 flex justify-center items-start ml-64 pt-10"> 
+      {/* Conteúdo principal */}
+      <div className="flex-1 flex justify-center items-start ml-64 pt-10">
         <section className="flex flex-col md:flex-row gap-x-28 w-full max-w-7xl items-start mt-6">
+          {/* Coluna da foto */}
           <div className="flex flex-col items-center md:mt-4 self-center mt-[calc(50%-14rem)]">
             <div className="w-72 h-72 md:w-[28rem] md:h-[28rem] overflow-hidden border-4 border-gray-300 shadow-lg rounded-[20px] flex items-center justify-center bg-white">
               <img
@@ -96,7 +105,7 @@ export default function AreaFuncionario() {
 
             <label
               htmlFor="uploadFoto"
-              className=" bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
             >
               Escolher Foto
             </label>
@@ -109,13 +118,15 @@ export default function AreaFuncionario() {
             />
           </div>
 
-          {/* Coluna dos dados (LoginBox) */}
+          {/* Coluna dos dados */}
           <div className="flex-1">
             <div className="bg-white border-[14px] border-[#f5f4e8] rounded-[98px] shadow-lg p-8 w-full max-w-4xl min-h-[32rem] flex flex-col justify-center relative">
               <h1 className="text-[#3e300f] text-6xl font-bold text-center mb-6">
                 Meus dados
               </h1>
+
               <div className="space-y-6">
+                {/* Nome */}
                 <div>
                   <h3 className="text-[#3e300f] text-3xl font-bold">Nome:</h3>
                   <input
@@ -124,22 +135,28 @@ export default function AreaFuncionario() {
                     className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
                   />
                 </div>
+
+                {/* Cargo */}
                 <div>
                   <h3 className="text-[#3e300f] text-3xl font-bold">Cargo:</h3>
                   <input
                     value={cargo}
-                    readOnly
+                    onChange={(e) => setCargo(e.target.value)}
                     className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
                   />
                 </div>
+
+                {/* E-mail */}
                 <div>
-                  <h3 className="text-[#3e300f] text-3xl font-bold">Email:</h3>
+                  <h3 className="text-[#3e300f] text-3xl font-bold">E-mail:</h3>
                   <input
-                    value={user?.email ?? ""}
-                    readOnly
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
                   />
                 </div>
+
+                {/* Nova Senha */}
                 <div>
                   <h3 className="text-[#3e300f] text-3xl font-bold">Nova Senha:</h3>
                   <input
@@ -151,6 +168,8 @@ export default function AreaFuncionario() {
                   />
                 </div>
               </div>
+
+              {/* Botão Salvar */}
               <div className="mt-6 text-center">
                 <button
                   type="button"

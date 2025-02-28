@@ -13,7 +13,8 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 
 export const authRouter = createTRPCRouter({
-  // 🔹 Rota de Login
+
+  // 🔹 Login
   login: publicProcedure
     .input(z.object({
       email: z.string().email(),
@@ -26,14 +27,10 @@ export const authRouter = createTRPCRouter({
         where: { email },
       });
 
-      if (!user) {
-        throw new Error("E-mail ou senha incorretos.");
-      }
+      if (!user) throw new Error("E-mail ou senha incorretos.");
 
       const senhaCorreta = bcrypt.compareSync(senha, user.senha);
-      if (!senhaCorreta) {
-        throw new Error("E-mail ou senha incorretos.");
-      }
+      if (!senhaCorreta) throw new Error("E-mail ou senha incorretos.");
 
       return {
         message: "Login bem-sucedido!",
@@ -46,7 +43,7 @@ export const authRouter = createTRPCRouter({
       };
     }),
 
-  // 🔹 Rota de Cadastro
+  // 🔹 Cadastro
   signup: publicProcedure
     .input(z.object({
       nome: z.string(),
@@ -68,20 +65,17 @@ export const authRouter = createTRPCRouter({
 
       const senhaCriptografada = bcrypt.hashSync(senha, 10);
 
-      let imagePath = "/user.png";
+      let imagePath = "/user.png"; // Imagem padrão
 
       if (imagem && imagem.startsWith("data:image")) {
         const base64Data = imagem.split(",")[1];
-        if (!base64Data) {
-          throw new Error("Imagem inválida.");
+        if (base64Data) {
+          const buffer = Buffer.from(base64Data, "base64");
+          const filename = `${Date.now()}.png`;
+          const filePath = path.join(UPLOADS_DIR, filename);
+          fs.writeFileSync(filePath, buffer);
+          imagePath = `/uploads/${filename}`;
         }
-
-        const buffer = Buffer.from(base64Data, "base64");
-        const filename = `${Date.now()}.png`;
-        const filePath = path.join(UPLOADS_DIR, filename);
-
-        fs.writeFileSync(filePath, buffer);
-        imagePath = `/uploads/${filename}`;
       }
 
       const user = await ctx.db.user.create({
@@ -115,44 +109,43 @@ export const authRouter = createTRPCRouter({
       return { message: "Conta criada com sucesso!", user };
     }),
 
-  // 🔹 Rota para obter informações do usuário
-    getUser: publicProcedure
+  // 🔹 Obter dados do usuário
+  getUser: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-        const user = await ctx.db.user.findUnique({
-            where: { id: input.id },
-            include: {
-                funcionario: true,
-                administrador: true,
-            },
-        });
+      const user = await ctx.db.user.findUnique({
+        where: { id: input.id },
+        include: {
+          funcionario: true,
+          administrador: true,
+        },
+      });
 
-        if (!user) {
-            throw new Error("Usuário não encontrado.");
-        }
+      if (!user) throw new Error("Usuário não encontrado.");
 
-        return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            cargo: user.funcionario?.cargo || user.administrador?.cargo || "",
-        };
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        cargo: user.funcionario?.cargo ?? user.administrador?.cargo ?? "",
+      };
     }),
 
-
-  // 🔹 Rota para atualizar informações do usuário (nome, senha, foto)
+  // 🔹 Atualizar dados do usuário (nome, email, cargo, senha, foto)
   updateUser: publicProcedure
     .input(z.object({
       id: z.string(),
       name: z.string(),
+      email: z.string().email(),
+      cargo: z.string(),
       senha: z.string().optional(),
-      foto: z.string().optional(), // Base64 opcional para foto
+      foto: z.string().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
-      const { id, name, senha, foto } = input;
+      const { id, name, email, cargo, senha, foto } = input;
 
-      const updateData: any = { name };
+      const updateData: any = { name, email };
 
       if (senha) {
         updateData.senha = bcrypt.hashSync(senha, 10);
@@ -160,11 +153,10 @@ export const authRouter = createTRPCRouter({
 
       if (foto && foto.startsWith("data:image")) {
         const base64Data = foto.split(",")[1];
-        if (base64Data) {
+        if (base64Data) {  // 🔹 Evita erro com Buffer.from(undefined)
           const buffer = Buffer.from(base64Data, "base64");
           const filename = `${Date.now()}.png`;
           const filePath = path.join(UPLOADS_DIR, filename);
-
           fs.writeFileSync(filePath, buffer);
           updateData.image = `/uploads/${filename}`;
         }
@@ -174,6 +166,18 @@ export const authRouter = createTRPCRouter({
         where: { id },
         data: updateData,
       });
+
+      if (updatedUser.role === "ADMIN") {
+        await ctx.db.administrador.update({
+          where: { userId: id },
+          data: { cargo },
+        });
+      } else {
+        await ctx.db.funcionario.update({
+          where: { userId: id },
+          data: { cargo },
+        });
+      }
 
       return {
         message: "Dados atualizados com sucesso!",
