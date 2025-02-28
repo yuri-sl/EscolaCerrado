@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import bcrypt from "bcryptjs"; 
+import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 
@@ -19,10 +19,9 @@ export const authRouter = createTRPCRouter({
       email: z.string().email(),
       senha: z.string().min(6),
     }))
-    .mutation(async ({ input, ctx }) => { 
+    .mutation(async ({ input, ctx }) => {
       const { email, senha } = input;
 
-      // Busca o usuário pelo email
       const user = await ctx.db.user.findUnique({
         where: { email },
       });
@@ -31,7 +30,6 @@ export const authRouter = createTRPCRouter({
         throw new Error("E-mail ou senha incorretos.");
       }
 
-      // Verifica a senha
       const senhaCorreta = bcrypt.compareSync(senha, user.senha);
       if (!senhaCorreta) {
         throw new Error("E-mail ou senha incorretos.");
@@ -42,8 +40,8 @@ export const authRouter = createTRPCRouter({
         user: {
           id: user.id,
           email: user.email,
-          role: user.role, 
-          image: user.image, // Retorna a imagem do usuário
+          role: user.role,
+          image: user.image,
         },
       };
     }),
@@ -55,12 +53,11 @@ export const authRouter = createTRPCRouter({
       email: z.string().email(),
       cargo: z.string(),
       senha: z.string().min(6),
-      imagem: z.string().optional(), // Imagem recebida em Base64
+      imagem: z.string().optional(),
     }))
-    .mutation(async ({ input, ctx }) => { 
+    .mutation(async ({ input, ctx }) => {
       const { nome, email, cargo, senha, imagem } = input;
 
-      // Verifica se o e-mail já existe
       const userExistente = await ctx.db.user.findUnique({
         where: { email },
       });
@@ -69,19 +66,17 @@ export const authRouter = createTRPCRouter({
         throw new Error("Este e-mail já está cadastrado.");
       }
 
-      // Criptografa a senha
       const senhaCriptografada = bcrypt.hashSync(senha, 10);
 
-      let imagePath = "/user.png"; // Caminho padrão da imagem de perfil
+      let imagePath = "/user.png";
 
-      // Salva a imagem localmente se ela foi enviada
       if (imagem && imagem.startsWith("data:image")) {
-        const base64Data = imagem.split(",")[1]; // Garante que estamos pegando apenas os dados
+        const base64Data = imagem.split(",")[1];
         if (!base64Data) {
           throw new Error("Imagem inválida.");
         }
 
-        const buffer = Buffer.from(base64Data, "base64"); // Agora estamos seguros
+        const buffer = Buffer.from(base64Data, "base64");
         const filename = `${Date.now()}.png`;
         const filePath = path.join(UPLOADS_DIR, filename);
 
@@ -89,18 +84,16 @@ export const authRouter = createTRPCRouter({
         imagePath = `/uploads/${filename}`;
       }
 
-      // Cria o usuário no banco de dados
       const user = await ctx.db.user.create({
         data: {
           name: nome,
           email,
-          senha: senhaCriptografada, 
+          senha: senhaCriptografada,
           image: imagePath,
           role: cargo === "Administrador" ? "ADMIN" : "USER",
         },
       });
 
-      // Criar relação com Administrador ou Funcionário
       if (cargo === "Administrador") {
         await ctx.db.administrador.create({
           data: {
@@ -128,7 +121,13 @@ export const authRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const user = await ctx.db.user.findUnique({
         where: { id: input.id },
-        select: { id: true, email: true, name: true, role: true, image: true },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          image: true,
+        },
       });
 
       if (!user) {
@@ -136,5 +135,51 @@ export const authRouter = createTRPCRouter({
       }
 
       return user;
+    }),
+
+  // 🔹 Rota para atualizar informações do usuário (nome, senha, foto)
+  updateUser: publicProcedure
+    .input(z.object({
+      id: z.string(),
+      name: z.string(),
+      senha: z.string().optional(),
+      foto: z.string().optional(), // Base64 opcional para foto
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const { id, name, senha, foto } = input;
+
+      const updateData: any = { name };
+
+      if (senha) {
+        updateData.senha = bcrypt.hashSync(senha, 10);
+      }
+
+      if (foto && foto.startsWith("data:image")) {
+        const base64Data = foto.split(",")[1];
+        if (base64Data) {
+          const buffer = Buffer.from(base64Data, "base64");
+          const filename = `${Date.now()}.png`;
+          const filePath = path.join(UPLOADS_DIR, filename);
+
+          fs.writeFileSync(filePath, buffer);
+          updateData.image = `/uploads/${filename}`;
+        }
+      }
+
+      const updatedUser = await ctx.db.user.update({
+        where: { id },
+        data: updateData,
+      });
+
+      return {
+        message: "Dados atualizados com sucesso!",
+        user: {
+          id: updatedUser.id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          image: updatedUser.image,
+        },
+      };
     }),
 });
