@@ -34,15 +34,20 @@ export const caseRouter = createTRPCRouter({
 
   // Rota para deletar um "case" pelo título
   delete: publicProcedure
-    .input(z.string()) // O input será o ID do "case" a ser deletado
+    .input(z.string()) // Agora recebe um título
     .mutation(async ({ input, ctx }) => {
-      const id = input;
-      const deletedCase = await ctx.db.case.delete({
-        where: {
-          id: id, // Deleta o caso com o ID fornecido
-        },
+      const titulo = input;
+
+      const deletedCase = await ctx.db.case.deleteMany({
+        // Usa deleteMany para evitar erro se houver mais de um com o mesmo título
+        where: { titulo },
       });
-      return { deletedCase };
+
+      if (deletedCase.count === 0) {
+        throw new Error("Case não encontrado.");
+      }
+
+      return { message: `Case '${titulo}' deletado com sucesso!` };
     }),
   updateCase: publicProcedure
     .input(

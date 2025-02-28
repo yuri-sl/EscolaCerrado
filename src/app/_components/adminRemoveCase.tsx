@@ -1,55 +1,46 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { api } from "~/utils/api";
 
-const DeleteCaseComponent = () => {
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const { data: users, refetch } = api.auth.getAllUsers.useQuery();
-  const deleteUser = api.auth.deleteUser.useMutation({
+const DeleteCasePage: React.FC = () => {
+  const [caseTitle, setCaseTitle] = useState(""); // Estado para armazenar o título
+  const [message, setMessage] = useState("");
+
+  const deleteCaseMutation = api.case.delete.useMutation({
     onSuccess: () => {
-      alert("Usuário deletado com sucesso!");
-      refetch();
+      setMessage("Case deletado com sucesso!");
+      setCaseTitle(""); // Limpa o input
     },
     onError: (error) => {
-      alert(`Erro ao deletar usuário: ${error.message}`);
+      setMessage(`Erro: ${error.message}`);
     },
   });
 
   const handleDelete = () => {
-    if (!selectedUserId) {
-      alert("Por favor, selecione um usuário para deletar.");
+    if (!caseTitle.trim()) {
+      setMessage("Por favor, insira um título válido.");
       return;
     }
 
-    if (confirm("Tem certeza que deseja excluir este usuário?")) {
-      deleteUser.mutate({ id: selectedUserId });
-    }
+    deleteCaseMutation.mutate(caseTitle); // ✅ Agora envia o título
   };
 
   return (
-    <div className="rounded-md bg-white p-4 shadow-md">
-      <h2 className="mb-4 text-xl font-bold">Deletar Usuário</h2>
-      <select
-        className="w-full rounded border p-2"
-        onChange={(e) => setSelectedUserId(e.target.value)}
-        value={selectedUserId || ""}
-      >
-        <option value="">Selecione um usuário</option>
-        {users?.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.nome} (ID: {user.id})
-          </option>
-        ))}
-      </select>
-      <button
-        onClick={handleDelete}
-        className="mt-4 w-full rounded bg-red-600 px-4 py-2 text-white hover:bg-red-800"
-      >
-        Deletar Usuário
-      </button>
+    <div>
+      <h1>Deletar um Case</h1>
+      <div>
+        <input
+          type="text"
+          placeholder="Digite o título do case"
+          value={caseTitle}
+          onChange={(e) => setCaseTitle(e.target.value)} // Atualiza o estado
+        />
+        <button onClick={handleDelete}>Deletar Case</button>
+      </div>
+
+      {message && <p>{message}</p>}
+      {deleteCaseMutation.isPending && <p>Carregando...</p>}
     </div>
   );
 };
 
-export default DeleteCaseComponent;
+export default DeleteCasePage;
