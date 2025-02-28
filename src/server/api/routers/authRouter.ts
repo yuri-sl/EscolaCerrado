@@ -116,26 +116,30 @@ export const authRouter = createTRPCRouter({
     }),
 
   // 🔹 Rota para obter informações do usuário
-  getUser: publicProcedure
+    getUser: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      const user = await ctx.db.user.findUnique({
-        where: { id: input.id },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          role: true,
-          image: true,
-        },
-      });
+        const user = await ctx.db.user.findUnique({
+            where: { id: input.id },
+            include: {
+                funcionario: true,
+                administrador: true,
+            },
+        });
 
-      if (!user) {
-        throw new Error("Usuário não encontrado.");
-      }
+        if (!user) {
+            throw new Error("Usuário não encontrado.");
+        }
 
-      return user;
+        return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            cargo: user.funcionario?.cargo || user.administrador?.cargo || "",
+        };
     }),
+
 
   // 🔹 Rota para atualizar informações do usuário (nome, senha, foto)
   updateUser: publicProcedure

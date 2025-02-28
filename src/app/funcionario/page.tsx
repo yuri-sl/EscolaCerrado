@@ -18,12 +18,14 @@ export default function AreaFuncionario() {
 
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
+  const [cargo, setCargo] = useState(""); // Pega o cargo do banco
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>(user2.src);
 
   useEffect(() => {
     if (user) {
       setNome(user.name ?? "");
+      setCargo(user.cargo ?? "");  // Usa o campo cargo
       setPreview(user.image ? user.image : user2.src);
     }
   }, [user]);
@@ -87,17 +89,16 @@ export default function AreaFuncionario() {
           {/* Coluna da foto de perfil */}
           <div className="w-1/3 flex flex-col items-center mt-10">
             <div
-              className="w-64 h-64 overflow-hidden border-4 border-gray-300 shadow-lg"
-              style={{ borderRadius: "20px" }} // AQUI muda para border-radius 20px
+              className="w-72 h-72 overflow-hidden border-4 border-gray-300 shadow-lg"
+              style={{ borderRadius: "20px" }} // Quadrado com bordas arredondadas
             >
               <img
                 src={preview}
                 alt="Foto de perfil"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain" // Garante que a imagem não será cortada
               />
             </div>
 
-            {/* Estilizar input de file para esconder "Nenhuma imagem escolhida" */}
             <label
               htmlFor="uploadFoto"
               className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
@@ -115,58 +116,57 @@ export default function AreaFuncionario() {
 
           {/* Coluna dos dados */}
           <div className="w-2/3">
-            <div className="loginBox p-6 rounded-lg shadow-lg bg-white">
-              <h1 id="titleDados" className="text-2xl font-bold mb-6">Meus dados</h1>
+            <div className="loginBox p-8 rounded-lg shadow-lg bg-white" style={{ minWidth: "500px" }}>
+              <h1 className="text-3xl font-bold mb-10 mt-10">Meus dados</h1>
 
-              <div className="inputField mb-4">
-                <h3 className="font-semibold">Nome:</h3>
+              <div className="inputField mb-6">
+                <h3 className="font-semibold text-lg">Nome:</h3>
                 <input
                   id="infoInput"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-3 border rounded text-lg"
                 />
               </div>
 
-              <div className="inputField mb-4">
-                <h3 className="font-semibold">Cargo:</h3>
+              <div className="inputField mb-6">
+                <h3 className="font-semibold text-lg">Cargo:</h3>
                 <input
                   id="infoInput"
-                  value={user?.role === "ADMIN" ? "Administrador" : "Funcionário"}
+                  value={cargo}
                   readOnly
-                  className="w-full p-2 border rounded"
+                  className="w-full p-3 border rounded text-lg"
                 />
               </div>
 
-              <div className="inputField mb-4">
-                <h3 className="font-semibold">E-mail:</h3>
+              <div className="inputField mb-6">
+                <h3 className="font-semibold text-lg">E-mail:</h3>
                 <input
                   id="infoInput"
                   value={user?.email ?? ""}
                   readOnly
-                  className="w-full p-2 border rounded"
+                  className="w-full p-3 border rounded text-lg"
                 />
               </div>
 
-              <div className="inputField mb-4">
-                <h3 className="font-semibold">Nova Senha:</h3>
+              <div className="inputField mb-6">
+                <h3 className="font-semibold text-lg">Nova Senha:</h3>
                 <input
                   id="infoInput"
                   type="password"
                   value={senha}
                   placeholder="Deixe em branco para não alterar"
                   onChange={(e) => setSenha(e.target.value)}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-3 border rounded text-lg"
                 />
               </div>
 
               {/* Botão Azul Estilizado */}
-              <div className="SubmitButton mt-4">
+              <div className="SubmitButton mt-6">
                 <button
                   type="button"
                   onClick={handleSave}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded transition"
-                  style={{ borderRadius: "8px" }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded transition"
                 >
                   Salvar
                 </button>
