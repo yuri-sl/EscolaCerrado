@@ -10,6 +10,8 @@ import { Success_Cases } from "@prisma/client";
 import AddCaseForm from "~/app/_components/adminAddCaseForm";
 import TabelaCases from "~/app/_components/tabelaCases";
 import RemoverCases from "~/app/_components/adminRemoveCase";
+import EditarCase from "~/app/_components/adminUpdateCase";
+import DeleteCaseComponent from "~/app/_components/adminRemoveCase";
 
 const POPUP_TYPES = {
   ADD: "ADD",
@@ -187,110 +189,12 @@ const TabelaFuncPag: React.FC = () => {
             )}
             {visiblePopup === POPUP_TYPES.DELETE && (
               <Popup onClose={handleClosePopup}>
-                <RemoverCases />
+                <DeleteCaseComponent />
               </Popup>
             )}
             {visiblePopup === POPUP_TYPES.EDIT && (
               <Popup onClose={handleClosePopup}>
-                <form className="text-center" onSubmit={handleEditCase}>
-                  <h2 className="mb-4 text-xl font-bold text-MarromEscuro">
-                    Editar Case
-                  </h2>
-
-                  <label className="block text-[18px] font-bold text-MarromEscuro">
-                    Selecione um ID para editar:
-                  </label>
-                  <select
-                    className="my-2 w-full rounded-[20px] bg-Creme p-2 text-[16px]"
-                    onChange={(e) => {
-                      const selectedId = Number(e.target.value);
-                      const selectedCase = cases.find(
-                        (c) => c.id === selectedId,
-                      );
-                      if (selectedCase) setEditFormData(selectedCase);
-                    }}
-                    value={editFormData.id || ""}
-                  >
-                    <option value="">Selecione um case</option>
-                    {cases.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.titulo} (ID: {c.id})
-                      </option>
-                    ))}
-                  </select>
-
-                  {editFormData.id && (
-                    <>
-                      <label className="block text-[18px] font-bold text-MarromEscuro">
-                        Título:
-                      </label>
-                      <input
-                        className="w-full rounded-[20px] bg-Creme p-2 text-[16px]"
-                        value={editFormData.titulo}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            titulo: e.target.value,
-                          })
-                        }
-                      />
-
-                      <label className="block text-[18px] font-bold text-MarromEscuro">
-                        Descrição:
-                      </label>
-                      <input
-                        className="w-full rounded-[20px] bg-Creme p-2 text-[16px]"
-                        value={editFormData.descricao}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            descricao: e.target.value,
-                          })
-                        }
-                      />
-
-                      <label className="block text-[18px] font-bold text-MarromEscuro">
-                        Foto (URL):
-                      </label>
-                      <input
-                        className="w-full rounded-[20px] bg-Creme p-2 text-[16px]"
-                        value={editFormData.foto}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            foto: e.target.value,
-                          })
-                        }
-                      />
-
-                      {/* Exibição de erro */}
-                      {erro && <p className="font-bold text-red-600">{erro}</p>}
-
-                      <div className="mt-4 flex flex-row gap-4">
-                        <button
-                          className="h-10 w-32 rounded-[20px] bg-green-600 px-4 py-2 text-[18px] font-bold text-white hover:bg-green-900"
-                          type="submit"
-                        >
-                          Salvar
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleClosePopup}
-                          className="h-10 w-32 rounded-[20px] bg-gray-500 px-4 py-2 text-[18px] font-bold text-white hover:bg-gray-700"
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-
-                      {/* Mensagem de sucesso */}
-                      {sucesso && (
-                        <div className="mt-4 rounded bg-Verde px-4 py-2 text-[16px] font-bold text-white">
-                          Case atualizado com sucesso!
-                        </div>
-                      )}
-                    </>
-                  )}
-                </form>
+                <EditarCase />
               </Popup>
             )}
             {visiblePopup === POPUP_TYPES.ABOUT && (

@@ -15,7 +15,7 @@ const TabelaFuncionarios = () => {
   }
 
   return (
-    <main className="mb-20 p-6">
+    <main className="p-2">
       <h1 className="mb-12 mr-[200px] text-right font-gentium text-6xl font-bold">
         Funcionários cadastrados no sistema:
       </h1>

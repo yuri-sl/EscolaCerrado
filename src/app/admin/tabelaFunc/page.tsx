@@ -13,6 +13,7 @@ import { api } from "~/utils/api";
 import TabelaFuncionarios from "~/app/_components/tabelaFuncionarios";
 import EditarUsuario from "~/app/_components/adminUpdateConta";
 import RemoverCases from "~/app/_components/adminRemoveCase";
+import DeleteUserComponent from "~/app/_components/adminRemoveConta";
 
 const POPUP_TYPES = {
   ADD: "ADD",
@@ -186,7 +187,7 @@ const TabelaFuncPag: React.FC = () => {
             )}
             {visiblePopup === POPUP_TYPES.DELETE && (
               <Popup onClose={handleClosePopup}>
-                <AdminDeletarConta />
+                <DeleteUserComponent />
               </Popup>
             )}
 

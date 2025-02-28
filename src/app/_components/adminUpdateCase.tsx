@@ -2,18 +2,16 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
 
-const EditarUsuario = () => {
+const EditarCase = () => {
   const [id, setId] = useState("");
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [cargo, setCargo] = useState("");
-  const [senha, setSenha] = useState("");
-  const [imagem, setImagem] = useState("");
+  const [titulo, setTitulo] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [foto, setFoto] = useState("");
   const [sucesso, setSucesso] = useState(false);
   const [erro, setErro] = useState("");
 
-  // Mutação para atualizar o usuário
-  const updateMutation = api.auth.updateUser.useMutation({
+  // Mutação para atualizar o case
+  const updateMutation = api.case.updateCase.useMutation({
     onSuccess: () => {
       setSucesso(true);
       setTimeout(() => setSucesso(false), 3000);
@@ -25,22 +23,26 @@ const EditarUsuario = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    const parsedId = parseInt(id, 10); // Converte id para número inteiro, base 10
+    if (isNaN(parsedId)) {
+      console.error("ID inválido");
+      return;
+    }
+
     updateMutation.mutate({
       id,
-      nome,
-      email,
-      cargo,
-      senha,
-      imagem,
+      titulo,
+      descricao,
+      foto,
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
-      <h1 className="text-2xl font-bold">Editar Usuário</h1>
+      <h1 className="text-2xl font-bold">Editar Case</h1>
 
       <div>
-        <label>ID do Usuário:</label>
+        <label>ID do Case:</label>
         <input
           type="text"
           value={id}
@@ -51,50 +53,26 @@ const EditarUsuario = () => {
       </div>
 
       <div>
-        <label>Nome:</label>
+        <label>Título:</label>
         <input
           type="text"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
           className="w-full rounded border p-2"
         />
       </div>
 
       <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+        <label>Descrição:</label>
+        <textarea
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
           className="w-full rounded border p-2"
         />
       </div>
 
       <div>
-        <label>Cargo:</label>
-        <select
-          value={cargo}
-          onChange={(e) => setCargo(e.target.value)}
-          className="w-full rounded border p-2"
-        >
-          <option value="">Selecione um cargo</option>
-          <option value="Administrador">Administrador</option>
-          <option value="Usuário">Usuário</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Senha:</label>
-        <input
-          type="password"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          className="w-full rounded border p-2"
-        />
-      </div>
-
-      <div>
-        <label>Imagem:</label>
+        <label>Foto:</label>
         <input
           type="file"
           onChange={(e) => {
@@ -103,7 +81,7 @@ const EditarUsuario = () => {
               const reader = new FileReader();
               reader.onload = (event) => {
                 if (event.target?.result) {
-                  setImagem(event.target.result as string);
+                  setFoto(event.target.result as string);
                 }
               };
               reader.readAsDataURL(file);
@@ -115,7 +93,7 @@ const EditarUsuario = () => {
 
       {erro && <p className="text-red-600">{erro}</p>}
       {sucesso && (
-        <p className="text-green-600">Usuário atualizado com sucesso!</p>
+        <p className="text-green-600">Case atualizado com sucesso!</p>
       )}
 
       <button type="submit" className="rounded bg-Verde px-4 py-2 text-white">
@@ -125,4 +103,4 @@ const EditarUsuario = () => {
   );
 };
 
-export default EditarUsuario;
+export default EditarCase;

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import { api } from "~/utils/api";
 
 export const caseRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -33,14 +34,34 @@ export const caseRouter = createTRPCRouter({
 
   // Rota para deletar um "case" pelo título
   delete: publicProcedure
-    .input(z.string()) // O input será o título do "case" a ser deletado
+    .input(z.string()) // O input será o ID do "case" a ser deletado
     .mutation(async ({ input, ctx }) => {
-      const titulo = input;
+      const id = input;
       const deletedCase = await ctx.db.case.delete({
         where: {
-          titulo: titulo, // Deleta o caso com o título fornecido
+          id: id, // Deleta o caso com o ID fornecido
         },
       });
       return { deletedCase };
+    }),
+  updateCase: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        titulo: z.string(),
+        descricao: z.string(),
+        foto: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.case.update({
+        // <-- Corrigindo para ctx.db
+        where: { id: input.id },
+        data: {
+          titulo: input.titulo,
+          descricao: input.descricao,
+          foto: input.foto,
+        },
+      });
     }),
 });

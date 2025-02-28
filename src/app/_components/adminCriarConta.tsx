@@ -72,7 +72,7 @@ export default function AdminCriarConta() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex h-[960px] w-[679px] flex-col items-center rounded-[98px] border-[14px] border-Creme bg-Branco p-8 shadow-lg"
+      className="flex h-[960px] w-[679px] flex-col items-center rounded-[98px] bg-Branco p-8 shadow-lg"
     >
       <h1 className="mb-4 text-center text-[64px] font-bold text-MarromEscuro">
         Fazer Cadastro

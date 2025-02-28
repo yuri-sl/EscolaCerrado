@@ -23,6 +23,7 @@ const TabelaCases = () => {
               <th colSpan="3">Tabela de cases</th>
             </tr>
             <tr>
+              <th className="px-4 py-2 text-left text-xl font-semibold">ID</th>
               <th className="px-4 py-2 text-left text-xl font-semibold">
                 Título
               </th>
@@ -37,6 +38,7 @@ const TabelaCases = () => {
           <tbody>
             {cases?.map((caseData) => (
               <tr key={caseData.id} className="border-t">
+                <td className="px-4 py-2">{caseData.id}</td>
                 <td className="px-4 py-2">{caseData.titulo}</td>
                 <td className="px-4 py-2">{caseData.descricao}</td>
                 <td className="px-4 py-2">

@@ -1,86 +1,55 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { api } from "~/utils/api"; // Cliente tRPC para chamadas de API
 
-export default function DeletarCase() {
-  const router = useRouter();
-  const [titulo, setTitulo] = useState("");
-  const [sucesso, setSucesso] = useState(false);
-  const [erro, setErro] = useState("");
+import { useState, useEffect } from "react";
+import { api } from "~/utils/api";
 
-  // Mutação para deletar case via tRPC
-  const deleteMutation = api.case.delete.useMutation({
+const DeleteUserComponent = () => {
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const { data: users, refetch } = api.auth.getAllUsers.useQuery();
+  const deleteUser = api.auth.deleteUser.useMutation({
     onSuccess: () => {
-      setSucesso(true);
-      setTimeout(() => {
-        setSucesso(false);
-        router.push("/cases"); // Redireciona após sucesso
-      }, 3000);
+      alert("Usuário deletado com sucesso!");
+      refetch();
     },
     onError: (error) => {
-      setErro(error.message);
+      alert(`Erro ao deletar usuário: ${error.message}`);
     },
   });
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!titulo) {
-      setErro("Por favor, insira o título do case!");
+  const handleDelete = () => {
+    if (!selectedUserId) {
+      alert("Por favor, selecione um usuário para deletar.");
       return;
     }
-    setErro("");
-    deleteMutation.mutate(titulo);
+
+    if (confirm("Tem certeza que deseja excluir este usuário?")) {
+      deleteUser.mutate({ id: selectedUserId });
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex h-[500px] w-[400px] flex-col items-center rounded-[20px] border-[5px] border-gray-300 bg-white p-6 shadow-lg"
-    >
-      <h1 className="mb-4 text-center text-[32px] font-bold text-gray-800">
-        Deletar Case
-      </h1>
-
-      <div className="mb-4 w-full">
-        <label className="block text-[18px] font-bold text-gray-700">
-          Título do Case:
-        </label>
-
-        <input
-          type="text"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-          className="w-full rounded-[20px] bg-gray-100 p-2 text-[16px]"
-          placeholder="Insira o título do case"
-        />
-      </div>
-
-      {/* Exibição de erro */}
-      {erro && <p className="font-bold text-red-600">{erro}</p>}
-
-      <div className="flex flex-row gap-4">
-        <button
-          type="submit"
-          className="h-10 w-32 rounded-[20px] bg-red-700 px-4 py-2 text-[18px] font-bold text-white hover:bg-red-900"
-        >
-          Deletar
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/cases")}
-          className="h-10 w-32 rounded-[20px] bg-gray-500 px-4 py-2 text-[18px] font-bold text-white hover:bg-gray-700"
-        >
-          Cancelar
-        </button>
-      </div>
-
-      {/* Mensagem de sucesso */}
-      {sucesso && (
-        <div className="mt-4 rounded bg-green-500 px-4 py-2 text-[16px] font-bold text-white">
-          Case deletado com sucesso!
-        </div>
-      )}
-    </form>
+    <div className="rounded-md bg-white p-4 shadow-md">
+      <h2 className="mb-4 text-xl font-bold">Deletar Usuário</h2>
+      <select
+        className="w-full rounded border p-2"
+        onChange={(e) => setSelectedUserId(e.target.value)}
+        value={selectedUserId || ""}
+      >
+        <option value="">Selecione um usuário</option>
+        {users?.map((user) => (
+          <option key={user.id} value={user.id}>
+            {user.nome} (ID: {user.id})
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={handleDelete}
+        className="mt-4 w-full rounded bg-red-600 px-4 py-2 text-white hover:bg-red-800"
+      >
+        Deletar Usuário
+      </button>
+    </div>
   );
-}
+};
+
+export default DeleteUserComponent;
