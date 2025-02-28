@@ -52,7 +52,7 @@ export const caseRouter = createTRPCRouter({
   updateCase: publicProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.number(),
         titulo: z.string(),
         descricao: z.string(),
         foto: z.string(),

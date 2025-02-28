@@ -20,7 +20,7 @@ const TabelaCases = () => {
         <table className="min-w-full table-auto border-collapse">
           <thead className="bg-gray-200">
             <tr>
-              <th colSpan="3">Tabela de cases</th>
+              <th colSpan="4">Tabela de cases</th>
             </tr>
             <tr>
               <th className="px-4 py-2 text-left text-xl font-semibold">ID</th>
