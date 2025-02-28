@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import user2 from "../../../public/user2.png";
 import FuncionarioHeaderComponent from "../_components/funcionarioComponents/FuncSimpleHeader";
-import "../../styles/loginBox.css";
 
 export default function AreaFuncionario() {
   const userId = localStorage.getItem("userId") ?? "";
@@ -18,14 +17,14 @@ export default function AreaFuncionario() {
 
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
-  const [cargo, setCargo] = useState(""); // Pega o cargo do banco
+  const [cargo, setCargo] = useState("");
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>(user2.src);
 
   useEffect(() => {
     if (user) {
       setNome(user.name ?? "");
-      setCargo(user.cargo ?? "");  // Usa o campo cargo
+      setCargo(user.cargo ?? "");
       setPreview(user.image ? user.image : user2.src);
     }
   }, [user]);
@@ -83,25 +82,21 @@ export default function AreaFuncionario() {
         <FuncionarioHeaderComponent title="Área do Funcionário" />
       </div>
 
-      {/* Conteúdo principal */}
-      <div className="flex-1 p-10 ml-64 flex items-start mt-12">
-        <section className="flex gap-10 w-full">
-          {/* Coluna da foto de perfil */}
-          <div className="w-1/3 flex flex-col items-center mt-10">
-            <div
-              className="w-72 h-72 overflow-hidden border-4 border-gray-300 shadow-lg"
-              style={{ borderRadius: "20px" }} // Quadrado com bordas arredondadas
-            >
+      {/* Conteúdo principal ajustado */}
+      <div className="flex-1 flex justify-center items-start ml-64 pt-10"> 
+        <section className="flex flex-col md:flex-row gap-x-28 w-full max-w-7xl items-start mt-6">
+          <div className="flex flex-col items-center md:mt-4 self-center mt-[calc(50%-14rem)]">
+            <div className="w-72 h-72 md:w-[28rem] md:h-[28rem] overflow-hidden border-4 border-gray-300 shadow-lg rounded-[20px] flex items-center justify-center bg-white">
               <img
                 src={preview}
                 alt="Foto de perfil"
-                className="w-full h-full object-contain" // Garante que a imagem não será cortada
+                className="w-full h-full object-cover"
               />
             </div>
 
             <label
               htmlFor="uploadFoto"
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
+              className=" bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded cursor-pointer"
             >
               Escolher Foto
             </label>
@@ -114,59 +109,53 @@ export default function AreaFuncionario() {
             />
           </div>
 
-          {/* Coluna dos dados */}
-          <div className="w-2/3">
-            <div className="loginBox p-8 rounded-lg shadow-lg bg-white" style={{ minWidth: "500px" }}>
-              <h1 className="text-3xl font-bold mb-10 mt-10">Meus dados</h1>
-
-              <div className="inputField mb-6">
-                <h3 className="font-semibold text-lg">Nome:</h3>
-                <input
-                  id="infoInput"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  className="w-full p-3 border rounded text-lg"
-                />
+          {/* Coluna dos dados (LoginBox) */}
+          <div className="flex-1">
+            <div className="bg-white border-[14px] border-[#f5f4e8] rounded-[98px] shadow-lg p-8 w-full max-w-4xl min-h-[32rem] flex flex-col justify-center relative">
+              <h1 className="text-[#3e300f] text-6xl font-bold text-center mb-6">
+                Meus dados
+              </h1>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-[#3e300f] text-3xl font-bold">Nome:</h3>
+                  <input
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-[#3e300f] text-3xl font-bold">Cargo:</h3>
+                  <input
+                    value={cargo}
+                    readOnly
+                    className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-[#3e300f] text-3xl font-bold">Email:</h3>
+                  <input
+                    value={user?.email ?? ""}
+                    readOnly
+                    className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-[#3e300f] text-3xl font-bold">Nova Senha:</h3>
+                  <input
+                    type="password"
+                    value={senha}
+                    placeholder="Deixe em branco para não alterar"
+                    onChange={(e) => setSenha(e.target.value)}
+                    className="w-full bg-[#f5f4e8] p-3 rounded-full text-xl focus:outline-none"
+                  />
+                </div>
               </div>
-
-              <div className="inputField mb-6">
-                <h3 className="font-semibold text-lg">Cargo:</h3>
-                <input
-                  id="infoInput"
-                  value={cargo}
-                  readOnly
-                  className="w-full p-3 border rounded text-lg"
-                />
-              </div>
-
-              <div className="inputField mb-6">
-                <h3 className="font-semibold text-lg">E-mail:</h3>
-                <input
-                  id="infoInput"
-                  value={user?.email ?? ""}
-                  readOnly
-                  className="w-full p-3 border rounded text-lg"
-                />
-              </div>
-
-              <div className="inputField mb-6">
-                <h3 className="font-semibold text-lg">Nova Senha:</h3>
-                <input
-                  id="infoInput"
-                  type="password"
-                  value={senha}
-                  placeholder="Deixe em branco para não alterar"
-                  onChange={(e) => setSenha(e.target.value)}
-                  className="w-full p-3 border rounded text-lg"
-                />
-              </div>
-
-              {/* Botão Azul Estilizado */}
-              <div className="SubmitButton mt-6">
+              <div className="mt-6 text-center">
                 <button
                   type="button"
                   onClick={handleSave}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded transition"
+                  className="bg-[#bfbe50] text-[#3e300f] font-bold py-3 px-8 rounded-full text-2xl hover:bg-[#f5f261] hover:text-orange-500 transition"
                 >
                   Salvar
                 </button>
