@@ -7,6 +7,11 @@ import Popup from "../../_components/popUp";
 import { useState, useEffect } from "react";
 import "../../../styles/popup.css";
 import { Success_Cases } from "@prisma/client";
+import AddCaseForm from "~/app/_components/adminAddCaseForm";
+import TabelaCases from "~/app/_components/tabelaCases";
+import RemoverCases from "~/app/_components/adminRemoveCase";
+import EditarCase from "~/app/_components/adminUpdateCase";
+import DeleteCaseComponent from "~/app/_components/adminRemoveCase";
 
 const POPUP_TYPES = {
   ADD: "ADD",
@@ -136,39 +141,7 @@ const TabelaFuncPag: React.FC = () => {
       <HeaderComponent title={"Área do Administrador"} />
       <div className="flex gap-6">
         <section className="flex gap-6">
-          <table className="h-50px border border-gray-300 bg-white">
-            <thead>
-              <tr className="h-40px bg-gray-100">
-                <th className="border-b px-4 py-2 text-center" colSpan={4}>
-                  Tabela de Cases
-                </th>
-              </tr>
-              <tr className="bg-gray-100">
-                <th className="border-b px-4 py-2">Id</th>
-                <th className="border-b px-4 py-2">Título</th>
-                <th className="border-b px-4 py-2">Descrição</th>
-                <th className="border-b px-4 py-2">Foto</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cases.length > 0 ? (
-                cases.map((c) => (
-                  <tr key={c.id} className="hover:bg-gray-50">
-                    <td className="border-b px-4 py-2">{c.id}</td>
-                    <td className="border-b px-4 py-2">{c.titulo}</td>
-                    <td className="border-b px-4 py-2">{c.descricao}</td>
-                    <td className="border-b px-4 py-2">{c.foto}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={4} className="border-b px-4 py-2 text-center">
-                    Nenhum case encontrado
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          <TabelaCases />
           <div className="flex w-max flex-col">
             {/* Adicionar Novo Button */}
             <button
@@ -211,170 +184,17 @@ const TabelaFuncPag: React.FC = () => {
             </button>
             {visiblePopup === POPUP_TYPES.ADD && (
               <Popup onClose={handleClosePopup}>
-                <form className="text-center" onSubmit={handleCreateCase}>
-                  <h2 className="text-x1 mb-4 font-bold">
-                    Adicionar Novo Case
-                  </h2>
-                  <h3>Título</h3>
-                  <input
-                    placeholder="Insira o título do case"
-                    required
-                    value={newCaseData.titulo}
-                    onChange={(e) =>
-                      setNewCaseData({ ...newCaseData, titulo: e.target.value })
-                    }
-                  />
-                  <h3>Descrição</h3>
-                  <input
-                    placeholder="Insira a descrição do case"
-                    required
-                    value={newCaseData.descricao}
-                    onChange={(e) =>
-                      setNewCaseData({
-                        ...newCaseData,
-                        descricao: e.target.value,
-                      })
-                    }
-                  />
-                  <h3>Foto</h3>
-                  <input
-                    placeholder="Insira o link da foto do case"
-                    required
-                    value={newCaseData.foto}
-                    onChange={(e) =>
-                      setNewCaseData({ ...newCaseData, foto: e.target.value })
-                    }
-                  />
-                  <div className="flex flex-row border-t-8">
-                    <button
-                      className="bg-green-600 hover:bg-green-900"
-                      type="submit"
-                    >
-                      Criar novo item
-                    </button>
-                    <button
-                      className="bg-red-600 hover:bg-red-900"
-                      onClick={handleClosePopup}
-                    >
-                      Cancelar operação
-                    </button>
-                  </div>
-                </form>
+                <AddCaseForm />
               </Popup>
             )}
             {visiblePopup === POPUP_TYPES.DELETE && (
               <Popup onClose={handleClosePopup}>
-                <div className="text-center">
-                  <h2 className="text-x1 mb-4 font-bold">Excluir item</h2>
-                  <p>Selecione o Id do case a ser excluido</p>
-                  <select
-                    className="my-2 w-full rounded border p-2"
-                    onChange={(e) => setSelectedCasesId(Number(e.target.value))}
-                    value={selectedCasesId || ""}
-                  >
-                    <option value="">Selecione um usuário</option>
-                    {cases.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.titulo} (ID: {c.id})
-                      </option>
-                    ))}
-                  </select>
-                  <div className="mt-4 flex justify-center">
-                    <button
-                      className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-900"
-                      onClick={() =>
-                        selectedCasesId && handleDeleteCase(selectedCasesId)
-                      }
-                      disabled={!selectedCasesId} // Desativa o botão se nenhum usuário for selecionado
-                    >
-                      Confirmar Exclusão
-                    </button>
-                    <button
-                      className="ml-4 rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-700"
-                      onClick={handleClosePopup}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                  <h3>Deseja excluir o item?</h3>
-                </div>
+                <DeleteCaseComponent />
               </Popup>
             )}
             {visiblePopup === POPUP_TYPES.EDIT && (
               <Popup onClose={handleClosePopup}>
-                <form className="text-center" onSubmit={handleEditCase}>
-                  <h2 className="mb-4 text-xl font-bold">Editar Case</h2>
-                  <p>Selecione um ID para editar:</p>
-                  <select
-                    className="my-2 w-full rounded border p-2"
-                    onChange={(e) => {
-                      const selectedId = Number(e.target.value);
-                      const selectedCase = cases.find(
-                        (c) => c.id === selectedId,
-                      );
-                      if (selectedCase) setEditFormData(selectedCase);
-                    }}
-                    value={editFormData.id || ""}
-                  >
-                    <option value="">Selecione um case</option>
-                    {cases.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.titulo} (ID: {c.id})
-                      </option>
-                    ))}
-                  </select>
-                  {editFormData.id !== 0 && (
-                    <>
-                      <h3>Título</h3>
-                      <input
-                        className="w-full rounded border p-2"
-                        value={editFormData.titulo}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            titulo: e.target.value,
-                          })
-                        }
-                      />
-                      <h3>Descrição</h3>
-                      <input
-                        className="w-full rounded border p-2"
-                        value={editFormData.descricao}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            descricao: e.target.value,
-                          })
-                        }
-                      />
-                      <h3>Foto</h3>
-                      <input
-                        className="w-full rounded border p-2"
-                        value={editFormData.foto}
-                        onChange={(e) =>
-                          setEditFormData({
-                            ...editFormData,
-                            foto: e.target.value,
-                          })
-                        }
-                      />
-                      <div className="mt-4 flex justify-center">
-                        <button
-                          className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-900"
-                          type="submit"
-                        >
-                          Salvar Alterações
-                        </button>
-                        <button
-                          className="ml-4 rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-700"
-                          onClick={handleClosePopup}
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </form>
+                <EditarCase />
               </Popup>
             )}
             {visiblePopup === POPUP_TYPES.ABOUT && (
