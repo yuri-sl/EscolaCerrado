@@ -1,77 +1,46 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Limpar o banco de dados antes de inserir os dados
-  await prisma.case.deleteMany();
-  await prisma.administrador.deleteMany();
-  await prisma.funcionario.deleteMany();
-  await prisma.user.deleteMany();
+  const adminEmail = "admin@email.com";
+  const adminSenha = "admin123"; 
+  const adminCargo = "Administrador"; 
 
-  const hashedPassword = await bcrypt.hash("senhaSegura123", 10);
-
-  // Criando um Administrador
-  const admin = await prisma.user.create({
-    data: {
-      name: "Admin Teste",
-      email: "admin@email.com",
-      senha: hashedPassword,
-      role: "ADMIN",
-      image: "link-da-imagem",
-      administrador: {
-        create: {
-          cargo: "Diretor",
-          foto: "link-da-imagem"
-        }
-      }
-    },
-    include: {
-      administrador: true // Inclui a relação `administrador` no resultado
-    }
+  const adminExistente = await prisma.user.findUnique({
+    where: { email: adminEmail },
   });
 
-  console.log("Administrador criado:", admin);
+  if (!adminExistente) {
+    console.log("Criando Administrador...");
 
-  // Criando um Funcionário
-  const funcionario = await prisma.user.create({
-    data: {
-      name: "Funcionario Teste",
-      email: "funcionario@email.com",
-      senha: hashedPassword,
-      role: "FUNCIONARIO",
-      image: "link-da-imagem",
-      funcionario: {
-        create: {
-          cargo: "Professor",
-          foto: "link-da-imagem"
-        }
-      }
-    }
-  });
+    const senhaCriptografada = bcrypt.hashSync(adminSenha, 10);
 
-  console.log("Funcionário criado:", funcionario);
+    const newAdmin = await prisma.user.create({
+      data: {
+        name: "Admin Padrão",
+        email: adminEmail,
+        senha: senhaCriptografada,
+        role: "ADMIN",
+        image: "/user2.png",
+      },
+    });
 
-  // Criando um Case associado ao Administrador
-  const caso = await prisma.case.create({
-    data: {
-      titulo: "Caso de Exemplo",
-      descricao: "Este é um caso de exemplo criado pelo seed.",
-      foto: "link-da-imagem-do-caso",
-      administrador: {
-        connect: {
-          id: admin.administrador?.id // Conecta o Case ao Administrador criado
-        }
-      }
-    }
-    
-  });
+    await prisma.administrador.create({
+      data: {
+        userId: newAdmin.id,
+        cargo: adminCargo,
+        foto: "/user.png",
+      },
+    });
 
-  console.log("Case criado:", caso);
+    console.log("Administrador criado com sucesso!");
+  } else {
+    console.log("Administrador já existe.");
+  }
 }
 
-// Executar a seed
 main()
   .catch((e) => {
     console.error(e);
