@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import bcrypt from "bcryptjs"; 
+import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 
@@ -13,54 +13,48 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 
 export const authRouter = createTRPCRouter({
-  // 🔹 Rota de Login
+
+  // 🔹 Login
   login: publicProcedure
     .input(z.object({
       email: z.string().email(),
       senha: z.string().min(6),
     }))
-    .mutation(async ({ input, ctx }) => { 
+    .mutation(async ({ input, ctx }) => {
       const { email, senha } = input;
 
-      // Busca o usuário pelo email
       const user = await ctx.db.user.findUnique({
         where: { email },
       });
 
-      if (!user) {
-        throw new Error("E-mail ou senha incorretos.");
-      }
+      if (!user) throw new Error("E-mail ou senha incorretos.");
 
-      // Verifica a senha
       const senhaCorreta = bcrypt.compareSync(senha, user.senha);
-      if (!senhaCorreta) {
-        throw new Error("E-mail ou senha incorretos.");
-      }
+      if (!senhaCorreta) throw new Error("E-mail ou senha incorretos.");
 
       return {
         message: "Login bem-sucedido!",
         user: {
           id: user.id,
           email: user.email,
-          role: user.role, 
-          image: user.image, // Retorna a imagem do usuário
+          role: user.role,
+          image: user.image,
         },
       };
     }),
 
-  // 🔹 Rota de Cadastro
+  // 🔹 Cadastro
   signup: publicProcedure
     .input(z.object({
       nome: z.string(),
       email: z.string().email(),
       cargo: z.string(),
       senha: z.string().min(6),
-      imagem: z.string().optional(), // Imagem recebida em Base64
+      imagem: z.string().optional(),
     }))
-    .mutation(async ({ input, ctx }) => { 
+    .mutation(async ({ input, ctx }) => {
       const { nome, email, cargo, senha, imagem } = input;
 
-      // Verifica se o e-mail já existe
       const userExistente = await ctx.db.user.findUnique({
         where: { email },
       });
@@ -69,38 +63,31 @@ export const authRouter = createTRPCRouter({
         throw new Error("Este e-mail já está cadastrado.");
       }
 
-      // Criptografa a senha
       const senhaCriptografada = bcrypt.hashSync(senha, 10);
 
-      let imagePath = "/user.png"; // Caminho padrão da imagem de perfil
+      let imagePath = "/user.png"; // Imagem padrão
 
-      // Salva a imagem localmente se ela foi enviada
       if (imagem && imagem.startsWith("data:image")) {
-        const base64Data = imagem.split(",")[1]; // Garante que estamos pegando apenas os dados
-        if (!base64Data) {
-          throw new Error("Imagem inválida.");
+        const base64Data = imagem.split(",")[1];
+        if (base64Data) {
+          const buffer = Buffer.from(base64Data, "base64");
+          const filename = `${Date.now()}.png`;
+          const filePath = path.join(UPLOADS_DIR, filename);
+          fs.writeFileSync(filePath, buffer);
+          imagePath = `/uploads/${filename}`;
         }
-
-        const buffer = Buffer.from(base64Data, "base64"); // Agora estamos seguros
-        const filename = `${Date.now()}.png`;
-        const filePath = path.join(UPLOADS_DIR, filename);
-
-        fs.writeFileSync(filePath, buffer);
-        imagePath = `/uploads/${filename}`;
       }
 
-      // Cria o usuário no banco de dados
       const user = await ctx.db.user.create({
         data: {
           name: nome,
           email,
-          senha: senhaCriptografada, 
+          senha: senhaCriptografada,
           image: imagePath,
           role: cargo === "Administrador" ? "ADMIN" : "USER",
         },
       });
 
-      // Criar relação com Administrador ou Funcionário
       if (cargo === "Administrador") {
         await ctx.db.administrador.create({
           data: {
@@ -122,19 +109,85 @@ export const authRouter = createTRPCRouter({
       return { message: "Conta criada com sucesso!", user };
     }),
 
-  // 🔹 Rota para obter informações do usuário
+  // 🔹 Obter dados do usuário
   getUser: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const user = await ctx.db.user.findUnique({
         where: { id: input.id },
-        select: { id: true, email: true, name: true, role: true, image: true },
+        include: {
+          funcionario: true,
+          administrador: true,
+        },
       });
 
-      if (!user) {
-        throw new Error("Usuário não encontrado.");
+      if (!user) throw new Error("Usuário não encontrado.");
+
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        cargo: user.funcionario?.cargo ?? user.administrador?.cargo ?? "",
+      };
+    }),
+
+  // 🔹 Atualizar dados do usuário (nome, email, cargo, senha, foto)
+  updateUser: publicProcedure
+    .input(z.object({
+      id: z.string(),
+      name: z.string(),
+      email: z.string().email(),
+      cargo: z.string(),
+      senha: z.string().optional(),
+      foto: z.string().optional(),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      const { id, name, email, cargo, senha, foto } = input;
+
+      const updateData: any = { name, email };
+
+      if (senha) {
+        updateData.senha = bcrypt.hashSync(senha, 10);
       }
 
-      return user;
+      if (foto && foto.startsWith("data:image")) {
+        const base64Data = foto.split(",")[1];
+        if (base64Data) {  // 🔹 Evita erro com Buffer.from(undefined)
+          const buffer = Buffer.from(base64Data, "base64");
+          const filename = `${Date.now()}.png`;
+          const filePath = path.join(UPLOADS_DIR, filename);
+          fs.writeFileSync(filePath, buffer);
+          updateData.image = `/uploads/${filename}`;
+        }
+      }
+
+      const updatedUser = await ctx.db.user.update({
+        where: { id },
+        data: updateData,
+      });
+
+      if (updatedUser.role === "ADMIN") {
+        await ctx.db.administrador.update({
+          where: { userId: id },
+          data: { cargo },
+        });
+      } else {
+        await ctx.db.funcionario.update({
+          where: { userId: id },
+          data: { cargo },
+        });
+      }
+
+      return {
+        message: "Dados atualizados com sucesso!",
+        user: {
+          id: updatedUser.id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          image: updatedUser.image,
+        },
+      };
     }),
 });
