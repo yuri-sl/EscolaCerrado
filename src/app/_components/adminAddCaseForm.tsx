@@ -61,7 +61,7 @@ export default function AdminCriarCaso() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex h-[960px] w-[650px] items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-lg rounded-lg bg-white p-8 shadow-lg"
@@ -128,16 +128,9 @@ export default function AdminCriarCaso() {
         <div className="mt-6 flex justify-between">
           <button
             type="submit"
-            className="h-12 w-40 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            className="h-12 w-40 rounded-[51px] bg-Verde px-6 py-2 font-bold text-white hover:bg-Amarelo hover:text-orange-600"
           >
             Criar Caso
-          </button>
-          <button
-            type="button"
-            onClick={() => router.push("/admin/tabelaCasos")}
-            className="h-12 w-40 rounded-lg bg-red-600 text-white hover:bg-red-700"
-          >
-            Cancelar
           </button>
         </div>
 

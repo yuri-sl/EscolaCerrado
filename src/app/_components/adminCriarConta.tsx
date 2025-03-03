@@ -155,9 +155,6 @@ export default function AdminCriarConta() {
         >
           Criar
         </button>
-        <button className="h-12 w-40 rounded-[51px] bg-red-700 px-6 py-2 text-[24px] font-bold text-white hover:bg-red-900 hover:text-orange-600">
-          Cancelar
-        </button>
       </div>
 
       {/* Mensagem de sucesso */}

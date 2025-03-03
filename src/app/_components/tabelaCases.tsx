@@ -11,10 +11,6 @@ const TabelaCases = () => {
 
   return (
     <div className="mt-20 flex flex-col">
-      <h1 className="mb-12 ml-[200px] text-center font-gentium text-6xl font-bold">
-        Cases cadastrados no sistema:
-      </h1>
-
       {/* Tabela de casos */}
       <div className="ml-[240px] w-[80%] overflow-x-auto">
         <table className="min-w-full table-auto border-collapse">

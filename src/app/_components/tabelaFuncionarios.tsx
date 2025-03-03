@@ -16,9 +16,6 @@ const TabelaFuncionarios = () => {
 
   return (
     <main className="p-2">
-      <h1 className="mb-12 mr-[200px] text-right font-gentium text-6xl font-bold">
-        Funcionários cadastrados no sistema:
-      </h1>
       <div className="overflow-x-auto">
         <table className="border-collaps h-50px min-w-full table-auto border border-gray-300 bg-white">
           <thead className="h-40px bg-gray-100">

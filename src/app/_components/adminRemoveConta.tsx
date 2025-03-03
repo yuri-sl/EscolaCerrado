@@ -28,7 +28,7 @@ const DeleteUserComponent = () => {
   };
 
   return (
-    <div className="rounded-md bg-white p-4 shadow-md">
+    <div className="border-5 rounded-md border-solid border-black bg-white shadow-md">
       <h2 className="mb-4 text-xl font-bold">Deletar Usuário</h2>
       <select
         className="w-full rounded border p-2"

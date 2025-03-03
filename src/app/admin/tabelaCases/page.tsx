@@ -1,7 +1,5 @@
 "use client";
 import HeaderComponent from "../../_components/adminComponents/simpleHeader";
-import SwitchTabs from "../../_components/adminComponents/trocarAbas";
-import BotoesTabela from "~/app/_components/adminComponents/bot_Tabl_Func";
 import "../../../styles/table.css";
 import Popup from "../../_components/popUp";
 import { useState, useEffect } from "react";
@@ -9,9 +7,8 @@ import "../../../styles/popup.css";
 import { Success_Cases } from "@prisma/client";
 import AddCaseForm from "~/app/_components/adminAddCaseForm";
 import TabelaCases from "~/app/_components/tabelaCases";
-import RemoverCases from "~/app/_components/adminRemoveCase";
 import EditarCase from "~/app/_components/adminUpdateCase";
-import DeleteCaseComponent from "~/app/_components/adminRemoveCase";
+import DeleteCasePage from "~/app/_components/adminRemoveCase";
 
 const POPUP_TYPES = {
   ADD: "ADD",
@@ -159,14 +156,6 @@ const TabelaFuncPag: React.FC = () => {
               Excluir Item
             </button>
 
-            {/* Pesquisar Button */}
-            <button
-              onClick={() => handleOpenPopup(POPUP_TYPES.SEARCH)}
-              className="rounded-md bg-Azul px-4 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-blue-600 hover:shadow-lg"
-            >
-              Pesquisar
-            </button>
-
             {/* Editar Button */}
             <button
               onClick={() => handleOpenPopup(POPUP_TYPES.EDIT)}
@@ -175,13 +164,6 @@ const TabelaFuncPag: React.FC = () => {
               Editar
             </button>
 
-            {/* Salvar Button */}
-            <button
-              onClick={() => handleOpenPopup(POPUP_TYPES.ABOUT)}
-              className="rounded-md bg-Menta px-4 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-teal-500 hover:shadow-lg"
-            >
-              Sobre
-            </button>
             {visiblePopup === POPUP_TYPES.ADD && (
               <Popup onClose={handleClosePopup}>
                 <AddCaseForm />
@@ -189,71 +171,12 @@ const TabelaFuncPag: React.FC = () => {
             )}
             {visiblePopup === POPUP_TYPES.DELETE && (
               <Popup onClose={handleClosePopup}>
-                <DeleteCaseComponent />
+                <DeleteCasePage />
               </Popup>
             )}
             {visiblePopup === POPUP_TYPES.EDIT && (
               <Popup onClose={handleClosePopup}>
                 <EditarCase />
-              </Popup>
-            )}
-            {visiblePopup === POPUP_TYPES.ABOUT && (
-              <Popup onClose={handleClosePopup}>
-                <div className="text-center">
-                  <h2 className="text-x1 mb-4 font-bold">
-                    Informações detalhadas do item
-                  </h2>
-                  <p>
-                    Aqui estão as informações do funcionário mais
-                    detalhadamente:
-                  </p>
-                  <form className="text-center">
-                    <h3>Título</h3>
-                    <input
-                      placeholder="insira o Título do case"
-                      required
-                    ></input>
-                    <h3>Descrição</h3>
-                    <input
-                      placeholder="insira a descrição do case"
-                      required
-                    ></input>
-                    <h3>Insira o link da foto do case</h3>
-                    <input
-                      placeholder="insira o link da foto do case"
-                      required
-                    ></input>
-                    <div className="mt-4 flex justify-center">
-                      <button
-                        className="bg-red-600 hover:bg-red-900"
-                        onClick={handleClosePopup}
-                      >
-                        Fechar
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </Popup>
-            )}
-            {visiblePopup === POPUP_TYPES.SEARCH && (
-              <Popup onClose={handleClosePopup}>
-                <div className="text-center">
-                  <h2 className="text-x1 mb-4 font-bold">Pesquisar item</h2>
-                  <p>Pesquisar case no banco de dados</p>
-                  <div className="dropdown">
-                    <button className="dropbtn">Filtro</button>
-                    <div className="dropdown-content">
-                      <a href="#">Id</a>
-                      <a href="#">Título</a>
-                    </div>
-                  </div>
-                  <input placeholder="Insira o nome da pessoa"></input>
-                </div>
-                <div className="mt-4 flex justify-center">
-                  <button className="rounded-md bg-blue-700 px-4 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-blue-900">
-                    Pesquisar
-                  </button>
-                </div>
               </Popup>
             )}
           </div>

@@ -1,7 +1,6 @@
 "use client";
 import HeaderComponent from "../../_components/adminComponents/simpleHeader";
 import SwitchTabs from "../../_components/adminComponents/trocarAbas";
-import BotoesTabela from "~/app/_components/adminComponents/bot_Tabl_Func";
 import "../../../styles/table.css";
 import Popup from "../../_components/popUp";
 import { useState, useEffect } from "react";
@@ -157,14 +156,6 @@ const TabelaFuncPag: React.FC = () => {
               Excluir Item
             </button>
 
-            {/* Pesquisar Button */}
-            <button
-              onClick={() => handleOpenPopup(POPUP_TYPES.SEARCH)}
-              className="rounded-md bg-Azul px-4 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-blue-600 hover:shadow-lg"
-            >
-              Pesquisar
-            </button>
-
             {/* Editar Button */}
             <button
               onClick={() => handleOpenPopup(POPUP_TYPES.EDIT)}
@@ -173,13 +164,6 @@ const TabelaFuncPag: React.FC = () => {
               Editar
             </button>
 
-            {/* Salvar Button */}
-            <button
-              onClick={() => handleOpenPopup(POPUP_TYPES.ABOUT)}
-              className="rounded-md bg-Menta px-4 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-teal-500 hover:shadow-lg"
-            >
-              Sobre
-            </button>
             {visiblePopup === POPUP_TYPES.ADD && (
               <Popup onClose={handleClosePopup}>
                 <AdminCriarConta />
@@ -194,71 +178,6 @@ const TabelaFuncPag: React.FC = () => {
             {visiblePopup === POPUP_TYPES.EDIT && (
               <Popup onClose={handleClosePopup}>
                 <EditarUsuario />
-              </Popup>
-            )}
-            {visiblePopup === POPUP_TYPES.ABOUT && (
-              <Popup onClose={handleClosePopup}>
-                <div className="text-center">
-                  <h2 className="text-x1 mb-4 font-bold">
-                    Informações detalhadas do item
-                  </h2>
-                  <p>
-                    Aqui estão as informações do funcionário mais
-                    detalhadamente:
-                  </p>
-                  <form className="text-center">
-                    <h3>Nome</h3>
-                    <input
-                      placeholder="insira o nome do funcionário"
-                      required
-                    ></input>
-                    <h3>Cargo</h3>
-                    <input
-                      placeholder="insira a função do funcionário"
-                      required
-                    ></input>
-                    <h3>Email</h3>
-                    <input
-                      placeholder="insira o email do funcionário"
-                      required
-                    ></input>
-                    <h3>Senha</h3>
-                    <input
-                      placeholder="insira a senha do funcionário"
-                      required
-                    ></input>
-                    <div className="mt-4 flex justify-center">
-                      <button
-                        className="bg-red-600 hover:bg-red-900"
-                        onClick={handleClosePopup}
-                      >
-                        Fechar
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </Popup>
-            )}
-            {visiblePopup === POPUP_TYPES.SEARCH && (
-              <Popup onClose={handleClosePopup}>
-                <div className="text-center">
-                  <h2 className="text-x1 mb-4 font-bold">Pesquisar item</h2>
-                  <p>Pesquisar pessoa no banco de dados</p>
-                  <div className="dropdown">
-                    <button className="dropbtn">Filtro</button>
-                    <div className="dropdown-content">
-                      <a href="#">Id</a>
-                      <a href="#">Nome</a>
-                      <a href="#">Cargo</a>
-                    </div>
-                  </div>
-                  <input placeholder="Insira o nome da pessoa"></input>
-                </div>
-                <div className="mt-4 flex justify-center">
-                  <button className="rounded-md bg-blue-700 px-4 py-2 font-semibold text-white shadow-md transition duration-300 hover:bg-blue-900">
-                    Pesquisar
-                  </button>
-                </div>
               </Popup>
             )}
           </div>
