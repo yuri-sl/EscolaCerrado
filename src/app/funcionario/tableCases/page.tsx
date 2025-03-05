@@ -5,10 +5,11 @@ import Popup from "../../_components/popUp";
 import { useState, useEffect } from "react";
 import "../../../styles/popup.css";
 import { Success_Cases } from "@prisma/client";
-import AddCaseForm from "~/app/_components/adminAddCaseForm";
+import AddCaseForm from "~/app/_components/adminComponents/adminAddCaseForm";
 import TabelaCases from "~/app/_components/tabelaCases";
 import EditarCase from "~/app/_components/adminUpdateCase";
-import DeleteCasePage from "~/app/_components/adminRemoveCase";
+import DeleteCasePage from "~/app/_components/adminComponents/adminRemoveCase";
+import FuncionarioHeaderComponent from "~/app/_components/funcionarioComponents/FuncSimpleHeader";
 
 const POPUP_TYPES = {
   ADD: "ADD",
@@ -135,7 +136,7 @@ const TabelaFuncPag: React.FC = () => {
 
   return (
     <div className="flex h-screen w-max">
-      <HeaderComponent title={"Área do Administrador"} />
+      <FuncionarioHeaderComponent title="Área do Funcionário" />
       <div className="flex gap-6">
         <section className="flex gap-6">
           <TabelaCases />
